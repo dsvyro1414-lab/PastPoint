@@ -1,7 +1,6 @@
+import { PastPointGame } from "@/features/game/PastPointGame";
+import { bostonTeaPartyScene } from "@/features/game/boston-tea-party";
+
 export default function Home() {
-  return (
-    <main>
-      <div>Hello world!</div>
-    </main>
-  );
+  return <PastPointGame scene={bostonTeaPartyScene} />;
 }

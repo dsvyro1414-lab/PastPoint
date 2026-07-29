@@ -4,7 +4,12 @@ PastPoint is a GeoGuessr-style history game. Players explore a spherical
 historical reconstruction from one fixed viewpoint and determine what happened,
 where it happened, and when.
 
-The current vertical slice contains one playable round: the Boston Tea Party.
+The current preview contains two playable rounds:
+
+1. the Boston Tea Party;
+2. the Wright brothers' first powered flight.
+
+Both rounds run through the same reusable session engine and HUD.
 
 ## Current gameplay
 
@@ -15,7 +20,8 @@ The current vertical slice contains one playable round: the Boston Tea Party.
 - submit only after all three inputs are complete;
 - review event correctness, year difference, geographic distance, and the
   prepared scene explanation;
-- reset the entire round with `Play again`.
+- replay the current round or advance to the next scene;
+- restart the complete session after the final result.
 
 There is no scoring, authentication, leaderboard, backend, database, or runtime
 AI request in this slice.
@@ -46,12 +52,16 @@ current WebGL panorama dependency can stall the Next.js 16 Turbopack compiler.
 
 ```text
 src/app/
-  page.tsx                 loads the current scene
+  page.tsx                 loads the current preview session
 src/features/game/
   boston-tea-party.ts      scene content and accepted answers
+  wright-brothers-first-flight.ts
+                           second scene content and round configuration
+  scene-registry.ts        validated scene registry and session definition
+  session-state.ts         deterministic round replay/advance/restart state
   model.ts                 scene, answer, and result types
   logic.ts                 normalization and Haversine distance
-  PastPointGame.tsx        round state and submit/reset flow
+  PastPointGame.tsx        configured session HUD and submit flow
   PanoramaViewer.tsx       spherical 360° viewer adapter
   MapCanvas.tsx            Leaflet map adapter
   GuessMapPanel.tsx        floating location UI
@@ -60,17 +70,24 @@ src/features/game/
   game.module.css          HUD design system and responsive layout
 ```
 
-Scene data is deliberately separate from the interface. A later historical
-location should require a new scene object and a reviewed 2:1 panorama, not a
-rewrite of the game HUD.
+Scene data is deliberately separate from the interface. The Wright scene was
+added through a new scene object, a panorama, and a registry entry without
+rewriting the game HUD. Each scene also owns its initial panorama yaw, pitch,
+and zoom so its identifying evidence opens in a useful frame.
 
 ## Panorama asset status
 
-`public/images/boston-tea-party-panorama.png` is a temporary 2:1
-equirectangular asset for interaction development. It is not yet the
-historically reviewed final panorama. Final content should ideally be
-`4096 × 2048`, checked for historical accuracy, spherical projection quality,
-and a clean horizontal seam before publication.
+Both panoramas are temporary `1774 × 887` equirectangular assets for interaction
+development. They are not yet historically certified production masters. Final
+content should ideally be `4096 × 2048`, checked for historical accuracy,
+spherical projection quality, and a clean horizontal seam before publication.
+Until a higher-resolution master is accepted, the viewer limits maximum zoom
+to a `60°` vertical field of view while preserving the existing opening
+framing.
+
+The Wright research, provenance, visual constraints, and current validation are
+recorded in
+[its scene dossier](./docs/scenes/wright-brothers-first-flight.md).
 
 See [CONCEPT.md](./CONCEPT.md) for the product concept,
 [GAME_FIRST_DIRECTION.md](./GAME_FIRST_DIRECTION.md) for the game-first product

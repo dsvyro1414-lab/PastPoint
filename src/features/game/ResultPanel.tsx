@@ -1,6 +1,7 @@
 "use client";
 
 import {
+  ArrowRight,
   ArrowCounterClockwise,
   CalendarBlank,
   CheckCircle,
@@ -14,15 +15,27 @@ import styles from "./game.module.css";
 type ResultPanelProps = {
   scene: Scene;
   submission: Submission;
-  onPlayAgain: () => void;
+  showReplayRound: boolean;
+  primaryAction: "next-round" | "restart-session";
+  onReplayRound: () => void;
+  onPrimaryAction: () => void;
 };
 
 export function ResultPanel({
   scene,
   submission,
-  onPlayAgain,
+  showReplayRound,
+  primaryAction,
+  onReplayRound,
+  onPrimaryAction,
 }: ResultPanelProps) {
   const { answer, result } = submission;
+  const primaryLabel =
+    primaryAction === "next-round"
+      ? "Next round"
+      : showReplayRound
+        ? "Restart session"
+        : "Play again";
 
   return (
     <div className={styles.resultBackdrop}>
@@ -86,18 +99,38 @@ export function ResultPanel({
 
           <p className={styles.explanation}>{scene.explanation}</p>
 
-          <button
-            className={styles.playAgainButton}
-            type="button"
-            onClick={onPlayAgain}
-          >
-            <ArrowCounterClockwise
-              size={21}
-              weight="bold"
-              aria-hidden="true"
-            />
-            Play again
-          </button>
+          <div className={styles.resultActions}>
+            {showReplayRound ? (
+              <button
+                className={styles.replayRoundButton}
+                type="button"
+                onClick={onReplayRound}
+              >
+                <ArrowCounterClockwise
+                  size={21}
+                  weight="bold"
+                  aria-hidden="true"
+                />
+                Replay round
+              </button>
+            ) : null}
+            <button
+              className={styles.playAgainButton}
+              type="button"
+              onClick={onPrimaryAction}
+            >
+              {primaryAction === "next-round" ? (
+                <ArrowRight size={21} weight="bold" aria-hidden="true" />
+              ) : (
+                <ArrowCounterClockwise
+                  size={21}
+                  weight="bold"
+                  aria-hidden="true"
+                />
+              )}
+              {primaryLabel}
+            </button>
+          </div>
         </div>
 
         <div className={styles.resultMapWrap}>

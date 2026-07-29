@@ -274,19 +274,33 @@
   z-index: 9;
 }
 
-.eventPanel {
+.answerDock {
   position: absolute;
-  bottom: 256px;
-  left: clamp(22px, 9vw, 140px);
+  right: 22px;
+  bottom: 18px;
+  left: 22px;
   z-index: 9;
+  display: grid;
+  grid-template-columns:
+    minmax(240px, 320px)
+    clamp(360px, 38vw, 520px)
+    minmax(240px, 320px);
+  align-items: end;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.eventPanel {
+  position: relative;
+  z-index: 1;
   display: flex;
-  width: min(420px, calc(100vw - 44px));
-  height: 70px;
+  width: 100%;
+  height: 54px;
   align-items: center;
-  gap: 13px;
-  padding: 0 20px;
+  gap: 11px;
+  padding: 0 16px;
   border: 1px solid var(--border);
-  border-radius: 20px;
+  border-radius: 16px;
   color: var(--muted);
   background: var(--glass);
   box-shadow:
@@ -303,7 +317,7 @@
   outline: 0;
   color: var(--text);
   background: transparent;
-  font-size: 18px;
+  font-size: 16px;
   font-weight: 520;
 }
 
@@ -321,14 +335,12 @@
 }
 
 .yearSelector {
-  position: absolute;
-  right: clamp(22px, 9vw, 140px);
-  bottom: 102px;
-  left: clamp(22px, 9vw, 140px);
-  z-index: 7;
-  height: 136px;
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  height: 70px;
   border: 1px solid var(--border);
-  border-radius: 26px;
+  border-radius: 18px;
   background: rgba(17, 22, 29, 0.68);
   box-shadow:
     inset 0 1px 0 rgba(255, 255, 255, 0.09),
@@ -339,31 +351,31 @@
 
 .yearBubble {
   position: absolute;
-  top: -57px;
+  top: -31px;
   left: 50%;
   z-index: 3;
   display: grid;
-  min-width: 128px;
-  height: 66px;
-  padding: 0 22px;
+  min-width: 78px;
+  height: 38px;
+  padding: 0 12px;
   place-items: center;
   border: 1px solid rgba(255, 255, 255, 0.86);
-  border-radius: 20px;
+  border-radius: 12px;
   color: #202b39;
   background: rgba(246, 248, 250, 0.96);
   box-shadow: 0 12px 34px rgba(0, 0, 0, 0.28);
   transform: translateX(-50%);
-  font-size: 31px;
+  font-size: 20px;
   font-weight: 700;
   font-variant-numeric: tabular-nums;
 }
 
 .yearBubble::after {
   position: absolute;
-  bottom: -10px;
+  bottom: -6px;
   left: 50%;
-  width: 18px;
-  height: 18px;
+  width: 12px;
+  height: 12px;
   content: "";
   background: inherit;
   transform: translateX(-50%) rotate(45deg);
@@ -371,8 +383,8 @@
 
 .yearPointer {
   position: absolute;
-  top: 10px;
-  bottom: 43px;
+  top: 5px;
+  bottom: 34px;
   left: 50%;
   z-index: 2;
   width: 2px;
@@ -383,11 +395,11 @@
 
 .yearPointer::after {
   position: absolute;
-  bottom: -7px;
+  bottom: -5px;
   left: 50%;
-  width: 18px;
-  height: 18px;
-  border: 6px solid rgba(246, 248, 250, 0.96);
+  width: 12px;
+  height: 12px;
+  border: 4px solid rgba(246, 248, 250, 0.96);
   border-radius: 50%;
   content: "";
   background: #aeb7c2;
@@ -396,7 +408,7 @@
 
 .rulerScroll {
   position: absolute;
-  inset: 29px 18px 12px;
+  inset: 9px 8px 1px;
   overflow-x: scroll;
   overflow-y: hidden;
   cursor: grab;
@@ -426,48 +438,41 @@
 
 .tick {
   position: absolute;
-  top: 18px;
+  top: 6px;
   width: 1px;
-  height: 25px;
+  height: 14px;
   background: rgba(255, 255, 255, 0.42);
   transform: translateX(-50%);
 }
 
 .tickHalfCentury {
-  height: 33px;
+  height: 18px;
   background: rgba(255, 255, 255, 0.6);
 }
 
 .tickCentury {
-  height: 42px;
+  height: 23px;
   background: rgba(255, 255, 255, 0.88);
 }
 
 .tickLabel {
   position: absolute;
-  top: 52px;
+  top: 28px;
   left: 50%;
   color: rgba(255, 255, 255, 0.94);
   transform: translateX(-50%);
-  font-size: 18px;
+  font-size: 12px;
   font-weight: 520;
   font-variant-numeric: tabular-nums;
 }
 
 .rulerHelp {
-  position: absolute;
-  top: calc(100% + 10px);
-  left: 50%;
-  margin: 0;
-  color: rgba(255, 255, 255, 0.88);
-  transform: translateX(-50%);
-  white-space: nowrap;
-  font-size: 15px;
-  text-shadow: 0 2px 12px rgba(0, 0, 0, 0.58);
+  display: none;
 }
 
 .submitButton,
-.playAgainButton {
+.playAgainButton,
+.replayRoundButton {
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -485,19 +490,22 @@
 }
 
 .submitButton {
-  position: absolute;
-  right: 22px;
-  bottom: 26px;
-  z-index: 9;
-  min-width: 258px;
-  height: 58px;
-  padding: 0 28px 0 34px;
-  border-radius: 18px;
-  font-size: 18px;
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  max-width: 210px;
+  min-width: 0;
+  height: 54px;
+  gap: 14px;
+  padding: 0 18px;
+  border-radius: 16px;
+  font-size: 16px;
+  justify-self: end;
 }
 
 .submitButton:not(:disabled):hover,
-.playAgainButton:hover {
+.playAgainButton:hover,
+.replayRoundButton:hover {
   background: #fff;
   transform: translateY(-2px);
 }
@@ -512,6 +520,7 @@
 
 .submitButton:focus-visible,
 .playAgainButton:focus-visible,
+.replayRoundButton:focus-visible,
 .mapTopControls button:focus-visible,
 .mapZoomControls button:focus-visible,
 .mapRestoreButton:focus-visible {
@@ -648,12 +657,28 @@
   line-height: 1.62;
 }
 
-.playAgainButton {
+.resultActions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.playAgainButton,
+.replayRoundButton {
   min-height: 52px;
   align-self: flex-start;
   padding: 0 23px;
   border-radius: 16px;
   font-size: 16px;
+}
+
+.replayRoundButton {
+  color: rgba(255, 255, 255, 0.88);
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.replayRoundButton:hover {
+  background: rgba(255, 255, 255, 0.14);
 }
 
 .resultMapWrap {
@@ -729,6 +754,13 @@
     top: 16px;
   }
 
+  .answerDock {
+    right: 14px;
+    bottom: 12px;
+    left: 14px;
+    gap: 12px;
+  }
+
   .mapPanel {
     top: 78px;
     height: min(390px, 52vh);
@@ -739,33 +771,14 @@
   }
 
   .eventPanel {
-    bottom: 212px;
-    height: 62px;
+    height: 52px;
   }
 
   .yearSelector {
-    bottom: 80px;
-    height: 112px;
-  }
-
-  .rulerScroll {
-    inset: 24px 15px 8px;
-  }
-
-  .tick {
-    top: 12px;
-  }
-
-  .tickLabel {
-    top: 45px;
-  }
-
-  .rulerHelp {
-    display: none;
+    height: 70px;
   }
 
   .submitButton {
-    bottom: 14px;
     height: 52px;
   }
 
@@ -779,6 +792,18 @@
 
   .resultMapWrap {
     min-height: 430px;
+  }
+}
+
+@media (max-width: 1050px) and (min-width: 761px) {
+  .answerDock {
+    right: 12px;
+    left: 12px;
+    grid-template-columns:
+      minmax(190px, 240px)
+      clamp(300px, 38vw, 400px)
+      minmax(190px, 240px);
+    gap: 12px;
   }
 }
 
@@ -827,6 +852,10 @@
 }
 
 @media (max-width: 760px) {
+  .answerDock {
+    display: contents;
+  }
+
   .header {
     top: 12px;
     right: 12px;
@@ -915,74 +944,75 @@
   }
 
   .eventPanel {
+    position: absolute;
     right: 12px;
-    bottom: 220px;
+    bottom: 158px;
     left: 12px;
     width: auto;
-    height: 58px;
+    height: 52px;
     border-radius: 16px;
   }
 
   .eventPanel input {
-    font-size: 16px;
+    font-size: 15px;
   }
 
   .yearSelector {
+    position: absolute;
     right: 12px;
-    bottom: 74px;
+    bottom: 58px;
     left: 12px;
-    height: 100px;
-    border-radius: 20px;
+    width: auto;
+    height: 62px;
+    border-radius: 15px;
   }
 
   .yearBubble {
-    top: -45px;
-    min-width: 98px;
-    height: 52px;
-    border-radius: 15px;
-    font-size: 25px;
+    top: -28px;
+    min-width: 72px;
+    height: 34px;
+    border-radius: 10px;
+    font-size: 18px;
   }
 
   .yearPointer {
-    top: 7px;
+    top: 4px;
     bottom: 34px;
   }
 
   .rulerScroll {
-    inset: 19px 10px 5px;
+    inset: 7px 6px 1px;
   }
 
   .tick {
-    top: 10px;
-    height: 20px;
+    top: 5px;
+    height: 12px;
   }
 
   .tickHalfCentury {
-    height: 26px;
+    height: 16px;
   }
 
   .tickCentury {
-    height: 32px;
+    height: 20px;
   }
 
   .tickLabel {
-    top: 39px;
-    font-size: 14px;
-  }
-
-  .rulerHelp {
-    display: none;
+    top: 24px;
+    font-size: 11px;
   }
 
   .submitButton {
+    position: absolute;
     right: 12px;
-    bottom: 12px;
-    min-width: 190px;
-    height: 50px;
-    gap: 14px;
-    padding: 0 20px;
-    border-radius: 15px;
-    font-size: 16px;
+    bottom: 10px;
+    width: auto;
+    min-width: 180px;
+    height: 44px;
+    gap: 11px;
+    padding: 0 16px;
+    border-radius: 14px;
+    font-size: 14px;
   }
 
   .resultBackdrop {
@@ -1028,6 +1058,7 @@
   .panoramaCue,
   .submitButton,
   .playAgainButton,
+  .replayRoundButton,
   .mapTopControls button,
   .mapZoomControls button,
   .mapRestoreButton {

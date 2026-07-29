@@ -4,14 +4,23 @@ import type { Viewer as PhotoSphereViewer } from "@photo-sphere-viewer/core";
 import { useEffect, useRef } from "react";
 import styles from "./game.module.css";
 
+const MIN_VERTICAL_FOV_DEGREES = 60;
+const MAX_VERTICAL_FOV_DEGREES = 92;
+
 type PanoramaViewerProps = {
   panoramaUrl: string;
+  initialYawDegrees: number;
+  initialPitchDegrees: number;
+  initialZoomLevel: number;
   resetKey: number;
   onInteract: () => void;
 };
 
 export function PanoramaViewer({
   panoramaUrl,
+  initialYawDegrees,
+  initialPitchDegrees,
+  initialZoomLevel,
   resetKey,
   onInteract,
 }: PanoramaViewerProps) {
@@ -55,9 +64,14 @@ export function PanoramaViewer({
         mousewheel: true,
         mousewheelCtrlKey: false,
         touchmoveTwoFingers: false,
-        defaultZoomLvl: 38,
-        minFov: 32,
-        maxFov: 92,
+        defaultYaw: `${initialYawDegrees}deg`,
+        defaultPitch: `${initialPitchDegrees}deg`,
+        defaultZoomLvl: initialZoomLevel,
+        // The prototype panoramas do not contain enough source pixels for a
+        // close zoom. Keep maximum magnification near the configured opening
+        // frame until higher-resolution production masters are accepted.
+        minFov: MIN_VERTICAL_FOV_DEGREES,
+        maxFov: MAX_VERTICAL_FOV_DEGREES,
         moveSpeed: 1.15,
         zoomSpeed: 1.1,
         moveInertia: 0.78,
@@ -75,7 +89,13 @@ export function PanoramaViewer({
       container.removeEventListener("keydown", registerInteraction);
       viewer?.destroy();
     };
-  }, [panoramaUrl, resetKey]);
+  }, [
+    initialPitchDegrees,
+    initialYawDegrees,
+    initialZoomLevel,
+    panoramaUrl,
+    resetKey,
+  ]);
 
   return (
     <div

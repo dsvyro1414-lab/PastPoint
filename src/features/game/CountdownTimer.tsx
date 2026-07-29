@@ -5,11 +5,11 @@ import { useEffect, useState } from "react";
 import styles from "./game.module.css";
 
 type CountdownTimerProps = {
-  durationSeconds?: number;
+  durationSeconds: number;
 };
 
 export function CountdownTimer({
-  durationSeconds = 120,
+  durationSeconds,
 }: CountdownTimerProps) {
   const [secondsLeft, setSecondsLeft] = useState(durationSeconds);
 

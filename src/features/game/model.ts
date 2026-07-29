@@ -3,9 +3,28 @@ export type Coordinates = {
   lng: number;
 };
 
+export type YearRange = {
+  min: number;
+  max: number;
+};
+
+export type RoundConfiguration = {
+  initialYear: number;
+  yearRange: YearRange;
+};
+
+export type PanoramaConfiguration = {
+  url: string;
+  initialView: {
+    yawDegrees: number;
+    pitchDegrees: number;
+    zoomLevel: number;
+  };
+};
+
 export type Scene = {
   id: string;
-  panoramaUrl: string;
+  panorama: PanoramaConfiguration;
   event: string;
   acceptedEventAliases: string[];
   year: number;
@@ -14,6 +33,23 @@ export type Scene = {
     label: string;
   };
   explanation: string;
+  round: RoundConfiguration;
+};
+
+export type PanoramaOnboarding = {
+  label: string;
+  instruction: string;
+};
+
+export type GameSessionDefinition = {
+  id: string;
+  sceneIds: readonly string[];
+  timerDurationSeconds: number;
+  panoramaOnboarding: PanoramaOnboarding | null;
+};
+
+export type ResolvedGameSession = GameSessionDefinition & {
+  scenes: readonly [Scene, ...Scene[]];
 };
 
 export type PlayerAnswer = {

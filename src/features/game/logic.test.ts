@@ -6,6 +6,7 @@ import {
   isAcceptedEventAnswer,
   normalizeAnswer,
 } from "./logic";
+import { wrightBrothersFirstFlightScene } from "./wright-brothers-first-flight";
 
 describe("round evaluation", () => {
   it("normalizes harmless punctuation and repeated whitespace", () => {
@@ -20,6 +21,18 @@ describe("round evaluation", () => {
     ).toBe(true);
     expect(
       isAcceptedEventAnswer("Boston Massacre", bostonTeaPartyScene),
+    ).toBe(false);
+    expect(
+      isAcceptedEventAnswer(
+        "Первый полёт братьев Райт",
+        wrightBrothersFirstFlightScene,
+      ),
+    ).toBe(true);
+    expect(
+      isAcceptedEventAnswer(
+        "First Flight",
+        wrightBrothersFirstFlightScene,
+      ),
     ).toBe(false);
   });
 

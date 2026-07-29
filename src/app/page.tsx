@@ -1,6 +1,6 @@
 import { PastPointGame } from "@/features/game/PastPointGame";
-import { bostonTeaPartyScene } from "@/features/game/boston-tea-party";
+import { previewSession } from "@/features/game/scene-registry";
 
 export default function Home() {
-  return <PastPointGame scene={bostonTeaPartyScene} />;
+  return <PastPointGame session={previewSession} />;
 }

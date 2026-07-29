@@ -9,104 +9,51 @@ import {
   useCallback,
   useMemo,
   useReducer,
-  useState,
 } from "react";
 import { CountdownTimer } from "./CountdownTimer";
 import { GuessMapPanel } from "./GuessMapPanel";
 import { evaluateAnswer } from "./logic";
-import type {
-  Coordinates,
-  Scene,
-  Submission,
-} from "./model";
+import type { ResolvedGameSession } from "./model";
 import { PanoramaViewer } from "./PanoramaViewer";
 import { ResultPanel } from "./ResultPanel";
+import {
+  createInitialSessionState,
+  createSessionReducer,
+} from "./session-state";
 import { YearRuler } from "./YearRuler";
 import styles from "./game.module.css";
 
-const INITIAL_YEAR = 1750;
-
-type GameState = {
-  attemptId: number;
-  phase: "playing" | "result";
-  eventText: string;
-  year: number;
-  yearTouched: boolean;
-  location: Coordinates | null;
-  mapMinimized: boolean;
-  submission: Submission | null;
-};
-
-type GameAction =
-  | { type: "set-event"; value: string }
-  | { type: "set-year"; value: number; touched: boolean }
-  | { type: "set-location"; value: Coordinates }
-  | { type: "toggle-map" }
-  | { type: "submit"; submission: Submission }
-  | { type: "reset" };
-
-function createInitialState(attemptId = 0): GameState {
-  return {
-    attemptId,
-    phase: "playing",
-    eventText: "",
-    year: INITIAL_YEAR,
-    yearTouched: false,
-    location: null,
-    mapMinimized: false,
-    submission: null,
-  };
-}
-
-function reducer(state: GameState, action: GameAction): GameState {
-  switch (action.type) {
-    case "set-event":
-      return { ...state, eventText: action.value };
-    case "set-year":
-      return {
-        ...state,
-        year: action.value,
-        yearTouched: state.yearTouched || action.touched,
-      };
-    case "set-location":
-      return { ...state, location: action.value };
-    case "toggle-map":
-      return { ...state, mapMinimized: !state.mapMinimized };
-    case "submit":
-      return {
-        ...state,
-        phase: "result",
-        submission: action.submission,
-      };
-    case "reset":
-      return createInitialState(state.attemptId + 1);
-  }
-}
-
 type PastPointGameProps = {
-  scene: Scene;
+  session: ResolvedGameSession;
 };
 
-export function PastPointGame({ scene }: PastPointGameProps) {
-  const [state, dispatch] = useReducer(reducer, undefined, () =>
-    createInitialState(),
-  );
-  const [showPanoramaCue, setShowPanoramaCue] = useState(true);
+export function PastPointGame({ session }: PastPointGameProps) {
+  return <ConfiguredGameSession key={session.id} session={session} />;
+}
 
-  const canSubmit = useMemo(
-    () =>
-      state.eventText.trim().length > 0 &&
-      state.yearTouched &&
-      state.location !== null,
-    [
-      state.eventText,
-      state.location,
-      state.yearTouched,
-    ],
+function ConfiguredGameSession({ session }: PastPointGameProps) {
+  const sessionReducer = useMemo(
+    () => createSessionReducer(session.scenes),
+    [session.scenes],
   );
+  const [state, dispatch] = useReducer(
+    sessionReducer,
+    session.scenes[0].round.initialYear,
+    createInitialSessionState,
+  );
+  const scene = session.scenes[state.roundIndex];
+  const roundNumber = state.roundIndex + 1;
+  const roundCount = session.scenes.length;
+  const hasNextRound = roundNumber < roundCount;
+  const roundKey = `${session.id}-${state.roundToken}`;
+
+  const canSubmit =
+    state.eventText.trim().length > 0 &&
+    state.yearTouched &&
+    state.location !== null;
 
   const registerPanoramaInteraction = useCallback(() => {
-    setShowPanoramaCue(false);
+    dispatch({ type: "panorama-interacted" });
   }, []);
 
   const submitAnswer = () => {
@@ -129,16 +76,14 @@ export function PastPointGame({ scene }: PastPointGameProps) {
     });
   };
 
-  const playAgain = () => {
-    dispatch({ type: "reset" });
-    setShowPanoramaCue(true);
-  };
-
   return (
     <main className={styles.gameRoot}>
       <PanoramaViewer
-        panoramaUrl={scene.panoramaUrl}
-        resetKey={state.attemptId}
+        panoramaUrl={scene.panorama.url}
+        initialYawDegrees={scene.panorama.initialView.yawDegrees}
+        initialPitchDegrees={scene.panorama.initialView.pitchDegrees}
+        initialZoomLevel={scene.panorama.initialView.zoomLevel}
+        resetKey={state.roundToken}
         onInteract={registerPanoramaInteraction}
       />
       <div className={styles.panoramaShade} aria-hidden="true" />
@@ -146,23 +91,28 @@ export function PastPointGame({ scene }: PastPointGameProps) {
       <header className={styles.header}>
         <div className={styles.brandGroup}>
           <span className={styles.brand}>PASTPOINT</span>
-          <span className={styles.roundPill}>Round 1 of 1</span>
+          <span className={styles.roundPill}>
+            Round {roundNumber} of {roundCount}
+          </span>
         </div>
-        <CountdownTimer key={state.attemptId} />
+        <CountdownTimer
+          key={`timer-${roundKey}`}
+          durationSeconds={session.timerDurationSeconds}
+        />
       </header>
 
       {state.phase === "playing" ? (
         <>
-          {showPanoramaCue ? (
+          {state.panoramaCueVisible && session.panoramaOnboarding ? (
             <div className={styles.panoramaCue} aria-hidden="true">
-              <strong>360°</strong>
+              <strong>{session.panoramaOnboarding.label}</strong>
               <HandSwipeLeft size={28} weight="regular" />
-              <span>Drag to look around</span>
+              <span>{session.panoramaOnboarding.instruction}</span>
             </div>
           ) : null}
 
           <GuessMapPanel
-            key={`map-${state.attemptId}`}
+            key={`map-${roundKey}`}
             location={state.location}
             minimized={state.mapMinimized}
             onLocationChange={(value) =>
@@ -171,44 +121,54 @@ export function PastPointGame({ scene }: PastPointGameProps) {
             onToggleMinimized={() => dispatch({ type: "toggle-map" })}
           />
 
-          <label className={styles.eventPanel}>
-            <Question size={23} weight="regular" aria-hidden="true" />
-            <input
-              value={state.eventText}
-              onChange={(event) =>
-                dispatch({ type: "set-event", value: event.target.value })
+          <div className={styles.answerDock}>
+            <label className={styles.eventPanel}>
+              <Question size={21} weight="regular" aria-hidden="true" />
+              <input
+                value={state.eventText}
+                onChange={(event) =>
+                  dispatch({ type: "set-event", value: event.target.value })
+                }
+                placeholder="What happened here?"
+                autoComplete="off"
+                autoCorrect="off"
+                spellCheck={false}
+                aria-label="What happened here?"
+              />
+            </label>
+
+            <YearRuler
+              key={`year-${roundKey}`}
+              value={state.year}
+              range={scene.round.yearRange}
+              onChange={(value, touched) =>
+                dispatch({ type: "set-year", value, touched })
               }
-              placeholder="What happened here?"
-              autoComplete="off"
-              autoCorrect="off"
-              spellCheck={false}
-              aria-label="What happened here?"
             />
-          </label>
 
-          <YearRuler
-            key={`year-${state.attemptId}`}
-            value={state.year}
-            onChange={(value, touched) =>
-              dispatch({ type: "set-year", value, touched })
-            }
-          />
-
-          <button
-            className={styles.submitButton}
-            type="button"
-            disabled={!canSubmit}
-            onClick={submitAnswer}
-          >
-            Submit Answer
-            <ArrowRight size={21} weight="bold" aria-hidden="true" />
-          </button>
+            <button
+              className={styles.submitButton}
+              type="button"
+              disabled={!canSubmit}
+              onClick={submitAnswer}
+            >
+              Submit Answer
+              <ArrowRight size={19} weight="bold" aria-hidden="true" />
+            </button>
+          </div>
         </>
       ) : state.submission ? (
         <ResultPanel
           scene={scene}
           submission={state.submission}
-          onPlayAgain={playAgain}
+          showReplayRound={roundCount > 1}
+          primaryAction={hasNextRound ? "next-round" : "restart-session"}
+          onReplayRound={() => dispatch({ type: "replay-round" })}
+          onPrimaryAction={() =>
+            dispatch({
+              type: hasNextRound ? "advance-round" : "restart-session",
+            })
+          }
         />
       ) : null}
     </main>

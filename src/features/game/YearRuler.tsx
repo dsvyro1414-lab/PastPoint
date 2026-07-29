@@ -8,15 +8,14 @@ import {
   useMemo,
   useRef,
 } from "react";
+import type { YearRange } from "./model";
 import styles from "./game.module.css";
 
-const MIN_YEAR = 1500;
-const MAX_YEAR = 2000;
 const PIXELS_PER_YEAR = 3;
-const TRACK_RANGE_PIXELS = (MAX_YEAR - MIN_YEAR) * PIXELS_PER_YEAR;
 
 type YearRulerProps = {
   value: number;
+  range: YearRange;
   onChange: (year: number, interacted: boolean) => void;
 };
 
@@ -26,20 +25,26 @@ type DragState = {
   startScrollLeft: number;
 };
 
-export function YearRuler({ value, onChange }: YearRulerProps) {
+export function YearRuler({ value, range, onChange }: YearRulerProps) {
   const scrollRef = useRef<HTMLDivElement>(null);
   const dragRef = useRef<DragState | null>(null);
   const interactionRef = useRef(false);
   const initialValueRef = useRef(value);
   const currentValueRef = useRef(value);
+  const trackRangePixels =
+    (range.max - range.min) * PIXELS_PER_YEAR;
 
   const ticks = useMemo(
-    () =>
-      Array.from(
-        { length: (MAX_YEAR - MIN_YEAR) / 10 + 1 },
-        (_, index) => MIN_YEAR + index * 10,
-      ),
-    [],
+    () => {
+      const firstTick = Math.ceil(range.min / 10) * 10;
+      const tickCount = Math.floor((range.max - firstTick) / 10) + 1;
+
+      return Array.from(
+        { length: Math.max(0, tickCount) },
+        (_, index) => firstTick + index * 10,
+      );
+    },
+    [range.max, range.min],
   );
 
   useLayoutEffect(() => {
@@ -51,8 +56,8 @@ export function YearRuler({ value, onChange }: YearRulerProps) {
 
     interactionRef.current = false;
     scroller.scrollLeft =
-      (initialValueRef.current - MIN_YEAR) * PIXELS_PER_YEAR;
-  }, []);
+      (initialValueRef.current - range.min) * PIXELS_PER_YEAR;
+  }, [range.min]);
 
   const updateFromScroll = () => {
     const scroller = scrollRef.current;
@@ -62,10 +67,10 @@ export function YearRuler({ value, onChange }: YearRulerProps) {
     }
 
     const nextYear = Math.min(
-      MAX_YEAR,
+      range.max,
       Math.max(
-        MIN_YEAR,
-        Math.round(scroller.scrollLeft / PIXELS_PER_YEAR) + MIN_YEAR,
+        range.min,
+        Math.round(scroller.scrollLeft / PIXELS_PER_YEAR) + range.min,
       ),
     );
 
@@ -76,13 +81,16 @@ export function YearRuler({ value, onChange }: YearRulerProps) {
   };
 
   const moveToYear = (year: number) => {
-    const nextYear = Math.min(MAX_YEAR, Math.max(MIN_YEAR, year));
+    const nextYear = Math.min(
+      range.max,
+      Math.max(range.min, year),
+    );
     interactionRef.current = true;
     currentValueRef.current = nextYear;
 
     if (scrollRef.current) {
       scrollRef.current.scrollLeft =
-        (nextYear - MIN_YEAR) * PIXELS_PER_YEAR;
+        (nextYear - range.min) * PIXELS_PER_YEAR;
     }
 
     onChange(nextYear, true);
@@ -102,6 +110,7 @@ export function YearRuler({ value, onChange }: YearRulerProps) {
       startScrollLeft: scroller.scrollLeft,
     };
     event.currentTarget.setPointerCapture(event.pointerId);
+    onChange(currentValueRef.current, true);
   };
 
   const handlePointerMove = (event: PointerEvent<HTMLDivElement>) => {
@@ -132,6 +141,7 @@ export function YearRuler({ value, onChange }: YearRulerProps) {
 
     event.preventDefault();
     interactionRef.current = true;
+    onChange(currentValueRef.current, true);
     scroller.scrollLeft +=
       Math.abs(event.deltaX) > Math.abs(event.deltaY)
         ? event.deltaX
@@ -141,7 +151,7 @@ export function YearRuler({ value, onChange }: YearRulerProps) {
   const handleKeyDown = (event: KeyboardEvent<HTMLDivElement>) => {
     if (event.key === "Home" || event.key === "End") {
       event.preventDefault();
-      moveToYear(event.key === "Home" ? MIN_YEAR : MAX_YEAR);
+      moveToYear(event.key === "Home" ? range.min : range.max);
       return;
     }
 
@@ -172,8 +182,8 @@ export function YearRuler({ value, onChange }: YearRulerProps) {
         className={styles.rulerScroll}
         role="slider"
         aria-label="Select the year"
-        aria-valuemin={MIN_YEAR}
-        aria-valuemax={MAX_YEAR}
+        aria-valuemin={range.min}
+        aria-valuemax={range.max}
         aria-valuenow={value}
         tabIndex={0}
         onScroll={updateFromScroll}
@@ -186,12 +196,12 @@ export function YearRuler({ value, onChange }: YearRulerProps) {
       >
         <div
           className={styles.rulerTrack}
-          style={{ width: `calc(100% + ${TRACK_RANGE_PIXELS}px)` }}
+          style={{ width: `calc(100% + ${trackRangePixels}px)` }}
         >
           {ticks.map((year) => {
             const isCentury = year % 100 === 0;
             const isHalfCentury = year % 50 === 0;
-            const offset = (year - MIN_YEAR) * PIXELS_PER_YEAR;
+            const offset = (year - range.min) * PIXELS_PER_YEAR;
 
             return (
               <span
@@ -203,7 +213,7 @@ export function YearRuler({ value, onChange }: YearRulerProps) {
                       : ""
                 }`}
                 style={{
-                  left: `calc((100% - ${TRACK_RANGE_PIXELS}px) / 2 + ${offset}px)`,
+                  left: `calc((100% - ${trackRangePixels}px) / 2 + ${offset}px)`,
                 }}
                 key={year}
                 aria-hidden="true"

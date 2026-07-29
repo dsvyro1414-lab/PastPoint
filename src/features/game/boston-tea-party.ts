@@ -2,7 +2,14 @@ import type { Scene } from "./model";
 
 export const bostonTeaPartyScene: Scene = {
   id: "boston-tea-party",
-  panoramaUrl: "/images/boston-tea-party-panorama.png",
+  panorama: {
+    url: "/images/boston-tea-party-panorama.png",
+    initialView: {
+      yawDegrees: 0,
+      pitchDegrees: 0,
+      zoomLevel: 71,
+    },
+  },
   event: "Boston Tea Party",
   acceptedEventAliases: [
     "Boston Tea Party",
@@ -18,4 +25,11 @@ export const bostonTeaPartyScene: Scene = {
   },
   explanation:
     "The tea chests, colonial merchant ships, nighttime harbor setting, and eighteenth-century clothing point toward the Boston Tea Party, which took place in Boston on December 16, 1773.",
+  round: {
+    initialYear: 1750,
+    yearRange: {
+      min: 1500,
+      max: 2000,
+    },
+  },
 };

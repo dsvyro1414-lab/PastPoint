@@ -33,43 +33,45 @@ sequence is:
 
 ## Next objective
 
-Build the rapid scene pipeline described below, then make the reusable engine a
-release-gated contract with repository-owned browser coverage and an
-accessibility pass. New scenes should be versioned data and reviewed assets, not
-copies of the Boston-specific interface.
+Build a repository-owned Skybox AI API generation lane and use the Wright scene
+to produce and review one native 8K master. Then choose the runtime delivery
+format from that accepted master and make the reusable engine a release-gated
+contract with browser coverage and an accessibility pass.
 
-## Next session — rapid scene pipeline
+## Next session — Skybox API panorama pipeline
 
-Before the deadline, design and implement a repeatable pipeline that can add a
-historical location without rewriting the interface. An API-backed workflow is
-allowed. The pipeline should turn reviewed sources into a versioned scene
-package, generate or ingest a panorama, validate metadata and assets, and
-produce a registry-ready scene only after review gates pass.
+Skybox AI API is now the canonical panorama generator. Generation happens
+offline before publication, never in the browser or during a player session.
+`SKYBOX_API_KEY` stays in ignored `.env.local`, is sent only through the
+server-side `x-api-key` header, and must never be logged or exposed through a
+`NEXT_PUBLIC_` variable.
 
-### Required panorama quality A/B test
+The pipeline should turn reviewed sources into a versioned scene package,
+generate a native `8192 × 4096` Model 3 master, validate metadata and assets,
+and produce a registry-ready scene only after review gates pass.
 
-Before replacing either current prototype, test both source-level upgrade
-approaches against the same reviewed scene blueprint, historical references,
-camera framing, and acceptance checklist:
+The API endpoints, copy-paste prompts, security contract, rejection gates, and
+result manifest are recorded in
+[the Skybox API panorama runbook](docs/experiments/skybox-api-panorama-generation.md).
 
-1. [ ] **OpenAI high-quality generation**
-   - use [OpenAI Image Generation](https://developers.openai.com/api/docs/guides/image-generation);
-   - request an exact `3840 × 1920` (`2:1`) image with `quality: high`;
-   - treat the result as a new historical reconstruction that must pass the
-     complete historical, projection, seam, pole, and nadir review.
-2. [ ] **Native 360° generation**
-   - test a generator designed for equirectangular panoramas, initially
-     [Skybox AI](https://api-documentation.blockadelabs.com/api/skybox.html);
-   - target a true `8192 × 4096` (`8K`, `2:1`) panorama with a clean horizontal
-     seam;
-   - apply the same historical review even if projection and seam quality are
-     better by construction.
+### Required first API run
 
-Keep the current panorama unchanged as the control. Compare both candidates in
-the production viewer at identical yaw, pitch, field of view, desktop viewport,
-and mobile viewport. Record model/version, prompt and references, checksum,
-file size, load behaviour, seam/pole results, historical findings, and rendered
-screenshots. Do not select a replacement on sharpness alone.
+1. [ ] Implement an offline repository command that discovers Model 3 styles,
+   validates prompt limits, and fails closed before any paid request.
+2. [ ] Select and record a neutral photorealistic Model 3 style.
+3. [ ] Generate exactly one Wright candidate with the reviewed prompt,
+   `enhance_prompt: false`, and a fixed non-zero seed.
+4. [ ] Poll the request, export an equirectangular PNG at `8192 × 4096`, and
+   save the immutable master plus a sanitized provenance manifest.
+5. [ ] Verify exact dimensions, checksum, seam, horizon, poles, nadir, aircraft
+   anatomy, and absence of modern details.
+6. [ ] Only after the master passes, compare an optimized 4K derivative with
+   preview-plus-tiles 8K delivery in the production viewer.
+
+Keep the current panorama unchanged as the control. Do not automatically spend
+credits on several candidates; review the first result before another paid
+generation. OpenAI 4K remains an optional fallback benchmark and no longer
+blocks the Skybox pipeline.
 
 ## Before public production — start screen
 
@@ -116,8 +118,9 @@ Define one versioned scene package containing:
 - panorama provenance, licence, and review status;
 - automated schema and asset validation.
 
-The panorama stage should produce a true equirectangular asset, ideally
-`4096 × 2048`, and verify:
+The canonical panorama stage uses the offline Skybox AI API lane to produce an
+immutable native `8192 × 4096` master plus a sanitized manifest. Runtime assets
+are derived only after that master passes review. Verify:
 
 - horizontal seam continuity;
 - level horizon and correct spherical projection;
@@ -149,6 +152,12 @@ process.
 ## Definition of done for the next milestone
 
 - The round UI is driven by reusable scene/session configuration.
+- The offline Skybox command discovers Model 3 styles, validates prompts, and
+  requires explicit confirmation before a paid generation.
+- One Wright `8192 × 4096` master and sanitized provenance manifest pass the
+  technical and historical review gates.
+- The viewer test records an explicit decision between a 4K runtime derivative
+  and preview-plus-tiles 8K delivery.
 - The scene package has a versioned schema and validation command.
 - Boston has provenance and historical-review records.
 - A second reviewed scene runs through the same engine.

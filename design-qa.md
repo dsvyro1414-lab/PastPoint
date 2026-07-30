@@ -156,3 +156,35 @@ The browser console reported no warnings or errors during the complete workflow
 and responsive check.
 
 Phase A result: pass
+
+## Phase B minimal-product regression — July 30, 2026
+
+The Phase B production build passed a fresh browser workflow at `1536 × 1024`:
+
+1. The start screen explained the product, panorama controls, and the event,
+   year, and location guesses with one `Start game` action.
+2. Starting the game opened clean Boston at `1750`; no per-round onboarding
+   cue remained.
+3. Boston accepted its event, `1773`, and a map marker, then advanced to clean
+   Wright at `1900`.
+4. Wright accepted its event, `1903`, and a map marker.
+5. The final result exposed an explicit `Session complete` state and one
+   `Restart session` action.
+6. Restart returned directly to clean Boston at `1750`.
+
+The start screen and first gameplay state were also checked at `390 × 844`.
+The document measured exactly `390 × 844` with no horizontal or vertical
+overflow, and all start/game controls remained visible without a blocking
+overlap. Browser screenshots were visually reviewed at both sizes. Activating
+`Start game` moved keyboard focus to the named game-session region.
+
+A temporary diagnostic production build replaced only the Boston panorama and
+CARTO tile URLs with known-missing local URLs. It displayed `Panorama
+unavailable` with reload guidance and `Map unavailable` with
+connection/reload guidance. Both substitutions were reverted, the final
+production build was recreated, and its smoke check showed neither failure
+message.
+
+The final production browser console contained no warnings or errors.
+
+Phase B result: pass

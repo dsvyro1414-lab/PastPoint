@@ -20,6 +20,7 @@ deliberately postponed until after the hackathon.
 
 ## Current gameplay
 
+- begin with a short explanation of the three-part challenge and controls;
 - rotate and zoom a full-screen 360° panorama;
 - enter the event name without answer choices;
 - select a year on a draggable ruler;
@@ -53,6 +54,9 @@ pnpm build
 
 Development and production builds use Next.js Webpack mode because the current
 WebGL panorama dependency can stall the Next.js 16 Turbopack compiler.
+
+Panorama assets are local. The world map uses online CARTO basemap tiles, so
+location guessing requires a network connection.
 
 ## Project structure
 

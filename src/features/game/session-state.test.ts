@@ -54,7 +54,6 @@ function createCompletedRound() {
     value: bostonTeaPartyScene.location,
   });
   state = reducer(state, { type: "toggle-map" });
-  state = reducer(state, { type: "panorama-interacted" });
 
   return reducer(state, { type: "submit", submission });
 }
@@ -72,7 +71,6 @@ describe("multi-round session state", () => {
       year: 1750,
       yearTouched: false,
       location: null,
-      panoramaCueVisible: true,
       submission: null,
     });
   });
@@ -90,7 +88,6 @@ describe("multi-round session state", () => {
       year: 1900,
       yearTouched: false,
       location: null,
-      panoramaCueVisible: true,
       submission: null,
     });
   });
@@ -130,7 +127,6 @@ describe("multi-round session state", () => {
       yearTouched: false,
       location: null,
       mapMinimized: false,
-      panoramaCueVisible: true,
       submission: null,
     });
   });

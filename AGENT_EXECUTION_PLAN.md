@@ -17,7 +17,7 @@ The order is locked:
 Agents must not mix these stages. Complete and validate the current stage before
 starting the next one.
 
-Active stage: **Phase A complete — awaiting user review. Phase B is not yet
+Active stage: **Phase B complete — awaiting user review. Phase C is not yet
 authorized**.
 
 ## Starting state
@@ -312,6 +312,34 @@ repeat on every round.
 
 Stop and hand off before producing new scenes unless the user explicitly
 authorizes Phase C.
+
+## Phase B completion record — July 30, 2026
+
+Phase B added one local start/session phase with the product pitch, panorama
+controls, and event/year/location instructions. The accepted start screen
+replaced the per-round panorama onboarding state and listeners. The final
+round result now says `Session complete`, while full-session restart still
+returns directly to a clean Boston round.
+
+Panorama initialization and load failures now expose concise reload guidance.
+Map initialization and CARTO tile failures expose concise connection/reload
+guidance, and the README records the online tile dependency. No router, mode,
+score, persistence, authentication, offline basemap, or test framework was
+added.
+
+Direct ESLint, TypeScript, 14 unit tests, the production Webpack build, and
+`git diff --check` passed. The `pnpm lint` and `pnpm test` wrappers were also
+attempted, but the local GUI shell triggered pnpm's known non-TTY module-purge
+guard while the registry was unavailable; the corresponding checked-in local
+binaries passed.
+
+The production browser passed `start -> Boston -> Wright -> Session complete
+-> restart`, a `390 × 844` layout check, clean-state transitions, and a clean
+console. A temporary diagnostic build verified both failure messages with
+missing panorama and tile URLs; those URL substitutions were reverted before
+the final production build and smoke check.
+
+Phase C remains blocked pending explicit user authorization.
 
 # Phase C — Content expansion
 

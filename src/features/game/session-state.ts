@@ -9,7 +9,6 @@ export type SessionState = {
   yearTouched: boolean;
   location: Coordinates | null;
   mapMinimized: boolean;
-  panoramaCueVisible: boolean;
   submission: Submission | null;
 };
 
@@ -18,7 +17,6 @@ export type SessionAction =
   | { type: "set-year"; value: number; touched: boolean }
   | { type: "set-location"; value: Coordinates }
   | { type: "toggle-map" }
-  | { type: "panorama-interacted" }
   | { type: "submit"; submission: Submission }
   | { type: "advance-round" }
   | { type: "restart-session" };
@@ -33,7 +31,6 @@ export function createInitialSessionState(initialYear: number): SessionState {
     yearTouched: false,
     location: null,
     mapMinimized: false,
-    panoramaCueVisible: true,
     submission: null,
   };
 }
@@ -70,10 +67,6 @@ export function createSessionReducer(
         return { ...state, location: action.value };
       case "toggle-map":
         return { ...state, mapMinimized: !state.mapMinimized };
-      case "panorama-interacted":
-        return state.panoramaCueVisible
-          ? { ...state, panoramaCueVisible: false }
-          : state;
       case "submit":
         return state.phase === "playing"
           ? {

@@ -24,9 +24,11 @@ The application currently has:
 
 - two playable rounds: Boston Tea Party and the Wright brothers' first flight;
 - one reusable data-driven session engine;
+- a lightweight start screen with the complete control instructions;
 - event, year, and map input;
 - raw event correctness, year difference, and geographic distance;
-- next-round and complete-session restart transitions;
+- next-round, explicit session-complete, and full restart transitions;
+- concise panorama and online-map failure guidance;
 - responsive desktop and mobile layouts;
 - unit tests and a previously completed manual browser regression.
 

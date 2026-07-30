@@ -5,6 +5,7 @@ import {
   ArrowCounterClockwise,
   CalendarBlank,
   CheckCircle,
+  FlagCheckered,
   MapPin,
   XCircle,
 } from "@phosphor-icons/react";
@@ -26,6 +27,7 @@ export function ResultPanel({
   onPrimaryAction,
 }: ResultPanelProps) {
   const { answer, result } = submission;
+  const sessionComplete = primaryAction === "restart-session";
   const primaryLabel =
     primaryAction === "next-round"
       ? "Next round"
@@ -33,8 +35,21 @@ export function ResultPanel({
 
   return (
     <div className={styles.resultBackdrop}>
-      <section className={styles.resultPanel} aria-label="Round result">
+      <section
+        className={styles.resultPanel}
+        aria-label={sessionComplete ? "Session complete" : "Round result"}
+      >
         <div className={styles.resultCopy}>
+          {sessionComplete ? (
+            <div className={styles.sessionComplete}>
+              <FlagCheckered size={22} weight="fill" aria-hidden="true" />
+              <span>
+                <small>Session complete</small>
+                <strong>All rounds explored</strong>
+              </span>
+            </div>
+          ) : null}
+
           <div
             className={`${styles.resultStatus} ${
               result.eventCorrect

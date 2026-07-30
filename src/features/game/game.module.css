@@ -11,6 +11,240 @@
   background: #07101a;
 }
 
+.gameRoot:focus {
+  outline: none;
+}
+
+.startRoot {
+  height: 100dvh;
+  overflow-x: hidden;
+  overflow-y: auto;
+  isolation: isolate;
+}
+
+.startImage,
+.startShade {
+  position: fixed;
+  inset: 0;
+}
+
+.startImage {
+  z-index: 0;
+  background:
+    url("/images/boston-tea-party-panorama.png") center 48% / cover
+    no-repeat;
+  filter: saturate(0.72) contrast(1.04);
+  transform: scale(1.015);
+}
+
+.startShade {
+  z-index: 1;
+  background:
+    linear-gradient(
+      90deg,
+      rgba(3, 8, 14, 0.96) 0%,
+      rgba(3, 8, 14, 0.86) 44%,
+      rgba(3, 8, 14, 0.42) 74%,
+      rgba(3, 8, 14, 0.62) 100%
+    ),
+    linear-gradient(
+      180deg,
+      rgba(3, 8, 14, 0.62) 0%,
+      transparent 34%,
+      rgba(3, 8, 14, 0.64) 100%
+    );
+}
+
+.startHeader {
+  position: absolute;
+  top: 24px;
+  right: 28px;
+  left: 28px;
+  z-index: 3;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.startRoundPill {
+  display: inline-flex;
+  min-height: 40px;
+  align-items: center;
+  padding: 0 15px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 999px;
+  color: rgba(255, 255, 255, 0.78);
+  background: rgba(15, 24, 35, 0.58);
+  font-size: 13px;
+  font-weight: 620;
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+}
+
+.startContent {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  width: min(980px, calc(100% - 56px));
+  min-height: 100dvh;
+  flex-direction: column;
+  justify-content: center;
+  margin: 0 auto;
+  padding: 112px 0 44px;
+}
+
+.startEyebrow {
+  margin: 0 0 14px;
+  color: rgba(255, 255, 255, 0.65);
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.startContent h1 {
+  max-width: 760px;
+  margin: 0;
+  font-size: clamp(54px, 7vw, 92px);
+  font-weight: 690;
+  letter-spacing: -0.065em;
+  line-height: 0.91;
+  text-wrap: balance;
+}
+
+.startPitch {
+  max-width: 650px;
+  margin: 24px 0 0;
+  color: rgba(255, 255, 255, 0.75);
+  font-size: clamp(17px, 2vw, 21px);
+  line-height: 1.5;
+  text-wrap: balance;
+}
+
+.panoramaInstruction {
+  display: inline-flex;
+  align-self: flex-start;
+  align-items: center;
+  gap: 12px;
+  margin-top: 28px;
+  padding: 11px 15px 11px 12px;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: 14px;
+  background: rgba(17, 27, 39, 0.58);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.07);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+}
+
+.panoramaInstruction > span {
+  display: grid;
+  gap: 2px;
+  font-size: 14px;
+  font-weight: 650;
+}
+
+.panoramaInstruction small {
+  color: rgba(255, 255, 255, 0.58);
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.guessInstructions {
+  display: grid;
+  width: 100%;
+  max-width: 920px;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+  margin: 28px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.guessInstructions li {
+  display: flex;
+  min-width: 0;
+  gap: 13px;
+  padding: 17px;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  border-radius: 18px;
+  background: rgba(13, 22, 33, 0.64);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.07),
+    0 18px 40px rgba(0, 0, 0, 0.2);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+}
+
+.instructionIcon {
+  display: grid;
+  width: 42px;
+  height: 42px;
+  flex: 0 0 auto;
+  place-items: center;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  border-radius: 13px;
+  color: rgba(255, 255, 255, 0.9);
+  background: rgba(255, 255, 255, 0.07);
+}
+
+.guessInstructions li > span:last-child {
+  display: grid;
+  min-width: 0;
+  align-content: start;
+  gap: 3px;
+}
+
+.guessInstructions small {
+  color: rgba(255, 255, 255, 0.52);
+  font-size: 10px;
+  font-weight: 720;
+  letter-spacing: 0.11em;
+  text-transform: uppercase;
+}
+
+.guessInstructions strong {
+  font-size: 15px;
+  font-weight: 680;
+}
+
+.guessInstructions li > span:last-child > span {
+  color: rgba(255, 255, 255, 0.62);
+  font-size: 12px;
+  line-height: 1.4;
+}
+
+.startButton {
+  display: inline-flex;
+  min-height: 54px;
+  align-self: flex-start;
+  align-items: center;
+  justify-content: center;
+  gap: 28px;
+  margin-top: 22px;
+  padding: 0 22px 0 25px;
+  border: 1px solid rgba(255, 255, 255, 0.92);
+  border-radius: 16px;
+  color: #172231;
+  background: rgba(248, 250, 252, 0.98);
+  box-shadow: 0 18px 42px rgba(0, 0, 0, 0.28);
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: 720;
+  transition:
+    background 160ms ease,
+    transform 160ms ease;
+}
+
+.startButton:hover {
+  background: #fff;
+  transform: translateY(-2px);
+}
+
+.startButton:focus-visible {
+  outline: 3px solid rgba(237, 245, 255, 0.78);
+  outline-offset: 4px;
+}
+
 .panorama {
   position: absolute;
   inset: 0;
@@ -92,31 +326,34 @@
   font-weight: 520;
 }
 
-.panoramaCue {
+.viewerFailure {
   position: absolute;
-  top: 47%;
+  top: 50%;
   left: 50%;
-  z-index: 5;
+  z-index: 4;
   display: grid;
-  place-items: center;
-  gap: 8px;
+  width: min(340px, calc(100% - 40px));
+  gap: 6px;
+  padding: 22px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 18px;
+  background: rgba(12, 20, 30, 0.9);
+  box-shadow: 0 24px 54px rgba(0, 0, 0, 0.4);
   transform: translate(-50%, -50%);
-  pointer-events: none;
   color: rgba(255, 255, 255, 0.97);
   text-align: center;
-  text-shadow: 0 3px 18px rgba(0, 0, 0, 0.76);
-  animation: cueIn 420ms ease-out both;
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
 }
 
-.panoramaCue strong {
-  font-size: clamp(48px, 4vw, 60px);
-  line-height: 0.9;
-  letter-spacing: -0.04em;
-}
-
-.panoramaCue span {
+.viewerFailure strong {
   font-size: 17px;
-  font-weight: 520;
+  font-weight: 680;
+}
+
+.viewerFailure span {
+  color: rgba(255, 255, 255, 0.66);
+  font-size: 14px;
 }
 
 .mapPanel {
@@ -135,10 +372,50 @@
     0 24px 52px rgba(0, 0, 0, 0.42);
 }
 
+.mapCanvasWrap,
 .mapCanvas {
   width: 100%;
   height: 100%;
+}
+
+.mapCanvasWrap {
+  position: relative;
+}
+
+.mapCanvas {
   background: #101a25;
+}
+
+.mapFailure {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  z-index: 600;
+  display: grid;
+  width: min(260px, calc(100% - 28px));
+  gap: 5px;
+  padding: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 15px;
+  color: rgba(255, 255, 255, 0.94);
+  background: rgba(12, 20, 30, 0.92);
+  box-shadow: 0 18px 42px rgba(0, 0, 0, 0.34);
+  transform: translate(-50%, -50%);
+  text-align: center;
+  pointer-events: none;
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+}
+
+.mapFailure strong {
+  font-size: 15px;
+  font-weight: 680;
+}
+
+.mapFailure span {
+  color: rgba(255, 255, 255, 0.64);
+  font-size: 12px;
+  line-height: 1.4;
 }
 
 .mapCanvas :global(.leaflet-control-attribution) {
@@ -545,6 +822,32 @@
   padding: 34px;
 }
 
+.sessionComplete {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  margin-bottom: 18px;
+  color: #fff3cd;
+}
+
+.sessionComplete > span {
+  display: grid;
+  gap: 2px;
+}
+
+.sessionComplete small {
+  color: rgba(255, 243, 205, 0.66);
+  font-size: 10px;
+  font-weight: 740;
+  letter-spacing: 0.11em;
+  text-transform: uppercase;
+}
+
+.sessionComplete strong {
+  font-size: 17px;
+  font-weight: 680;
+}
+
 .resultStatus {
   display: inline-flex;
   align-self: flex-start;
@@ -712,18 +1015,12 @@
   backdrop-filter: blur(14px);
 }
 
-@keyframes cueIn {
-  from {
-    opacity: 0;
-    transform: translate(-50%, -45%);
-  }
-  to {
-    opacity: 1;
-    transform: translate(-50%, -50%);
-  }
-}
-
 @media (max-height: 820px) and (min-width: 761px) {
+  .startContent {
+    justify-content: flex-start;
+    padding-top: 88px;
+  }
+
   .header {
     top: 16px;
   }
@@ -782,6 +1079,15 @@
 }
 
 @media (max-width: 900px) {
+  .startContent {
+    width: min(720px, calc(100% - 36px));
+  }
+
+  .guessInstructions {
+    grid-template-columns: 1fr;
+    max-width: 560px;
+  }
+
   .brandGroup {
     gap: 12px;
   }
@@ -819,6 +1125,64 @@
 }
 
 @media (max-width: 760px) {
+  .startHeader {
+    top: 14px;
+    right: 16px;
+    left: 16px;
+  }
+
+  .startHeader .brand {
+    font-size: 19px;
+  }
+
+  .startRoundPill {
+    min-height: 36px;
+    padding: 0 12px;
+    font-size: 11px;
+  }
+
+  .startContent {
+    width: calc(100% - 32px);
+    min-height: 100dvh;
+    justify-content: flex-start;
+    padding: 86px 0 28px;
+  }
+
+  .startContent h1 {
+    font-size: clamp(46px, 14vw, 62px);
+    line-height: 0.94;
+  }
+
+  .startPitch {
+    margin-top: 18px;
+    font-size: 16px;
+  }
+
+  .panoramaInstruction {
+    margin-top: 20px;
+  }
+
+  .guessInstructions {
+    gap: 8px;
+    margin-top: 18px;
+  }
+
+  .guessInstructions li {
+    padding: 13px;
+    border-radius: 16px;
+  }
+
+  .instructionIcon {
+    width: 38px;
+    height: 38px;
+    border-radius: 12px;
+  }
+
+  .startButton {
+    width: 100%;
+    margin-top: 16px;
+  }
+
   .answerDock {
     display: contents;
   }
@@ -836,24 +1200,6 @@
 
   .roundPill {
     margin-right: 0;
-  }
-
-  .panoramaCue {
-    top: 39%;
-    left: 20px;
-    width: 112px;
-    place-items: start;
-    transform: translateY(-50%);
-    text-align: left;
-    animation: none;
-  }
-
-  .panoramaCue strong {
-    font-size: 46px;
-  }
-
-  .panoramaCue span {
-    font-size: 14px;
   }
 
   .mapPanel {
@@ -1018,7 +1364,7 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .panoramaCue,
+  .startButton,
   .submitButton,
   .playAgainButton,
   .mapTopControls button,

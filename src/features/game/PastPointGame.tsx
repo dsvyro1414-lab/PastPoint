@@ -2,13 +2,16 @@
 
 import {
   ArrowRight,
-  HandSwipeLeft,
+  CalendarDots,
+  Compass,
+  MapPin,
   Question,
 } from "@phosphor-icons/react";
 import {
-  useCallback,
   useMemo,
   useReducer,
+  useRef,
+  useState,
 } from "react";
 import { GuessMapPanel } from "./GuessMapPanel";
 import { evaluateAnswer } from "./logic";
@@ -26,7 +29,98 @@ type PastPointGameProps = {
   scenes: readonly [Scene, ...Scene[]];
 };
 
+type StartScreenProps = {
+  roundCount: number;
+  onStart: () => void;
+};
+
+function StartScreen({ roundCount, onStart }: StartScreenProps) {
+  return (
+    <main className={`${styles.gameRoot} ${styles.startRoot}`}>
+      <div className={styles.startImage} aria-hidden="true" />
+      <div className={styles.startShade} aria-hidden="true" />
+
+      <header className={styles.startHeader}>
+        <span className={styles.brand}>PASTPOINT</span>
+        <span className={styles.startRoundPill}>
+          {roundCount}-round preview
+        </span>
+      </header>
+
+      <section
+        className={styles.startContent}
+        aria-labelledby="pastpoint-start-title"
+      >
+        <p className={styles.startEyebrow}>A 360° history game</p>
+        <h1 id="pastpoint-start-title">
+          Read the scene.
+          <br />
+          Find the moment.
+        </h1>
+        <p className={styles.startPitch}>
+          Explore a historical panorama and decide what happened, when it
+          happened, and where.
+        </p>
+
+        <div className={styles.panoramaInstruction}>
+          <Compass size={23} weight="regular" aria-hidden="true" />
+          <span>
+            Drag to look around
+            <small>Scroll or pinch to zoom</small>
+          </span>
+        </div>
+
+        <ol className={styles.guessInstructions}>
+          <li>
+            <span className={styles.instructionIcon}>
+              <Question size={23} weight="regular" aria-hidden="true" />
+            </span>
+            <span>
+              <small>What</small>
+              <strong>Name the event</strong>
+              <span>Use the visual clues in the scene.</span>
+            </span>
+          </li>
+          <li>
+            <span className={styles.instructionIcon}>
+              <CalendarDots size={23} weight="regular" aria-hidden="true" />
+            </span>
+            <span>
+              <small>When</small>
+              <strong>Choose the year</strong>
+              <span>Drag the ruler to set your answer.</span>
+            </span>
+          </li>
+          <li>
+            <span className={styles.instructionIcon}>
+              <MapPin size={23} weight="regular" aria-hidden="true" />
+            </span>
+            <span>
+              <small>Where</small>
+              <strong>Pin the location</strong>
+              <span>Place one marker on the world map.</span>
+            </span>
+          </li>
+        </ol>
+
+        <button
+          className={styles.startButton}
+          type="button"
+          onClick={onStart}
+        >
+          Start game
+          <ArrowRight size={20} weight="bold" aria-hidden="true" />
+        </button>
+      </section>
+    </main>
+  );
+}
+
 export function PastPointGame({ scenes }: PastPointGameProps) {
+  const gameRootRef = useRef<HTMLElement>(null);
+  const [experiencePhase, setExperiencePhase] = useState<
+    "start" | "session"
+  >("start");
   const sessionReducer = useMemo(
     () => createSessionReducer(scenes),
     [scenes],
@@ -47,9 +141,10 @@ export function PastPointGame({ scenes }: PastPointGameProps) {
     state.yearTouched &&
     state.location !== null;
 
-  const registerPanoramaInteraction = useCallback(() => {
-    dispatch({ type: "panorama-interacted" });
-  }, []);
+  const startSession = () => {
+    setExperiencePhase("session");
+    window.requestAnimationFrame(() => gameRootRef.current?.focus());
+  };
 
   const submitAnswer = () => {
     if (!canSubmit || !state.location || state.phase !== "playing") {
@@ -71,15 +166,28 @@ export function PastPointGame({ scenes }: PastPointGameProps) {
     });
   };
 
+  if (experiencePhase === "start") {
+    return (
+      <StartScreen
+        roundCount={roundCount}
+        onStart={startSession}
+      />
+    );
+  }
+
   return (
-    <main className={styles.gameRoot}>
+    <main
+      ref={gameRootRef}
+      className={styles.gameRoot}
+      aria-label="PastPoint game session"
+      tabIndex={-1}
+    >
       <PanoramaViewer
         panoramaUrl={scene.panorama.url}
         initialYawDegrees={scene.panorama.initialView.yawDegrees}
         initialPitchDegrees={scene.panorama.initialView.pitchDegrees}
         initialZoomLevel={scene.panorama.initialView.zoomLevel}
         resetKey={state.roundToken}
-        onInteract={registerPanoramaInteraction}
       />
       <div className={styles.panoramaShade} aria-hidden="true" />
 
@@ -94,14 +202,6 @@ export function PastPointGame({ scenes }: PastPointGameProps) {
 
       {state.phase === "playing" ? (
         <>
-          {state.panoramaCueVisible ? (
-            <div className={styles.panoramaCue} aria-hidden="true">
-              <strong>360°</strong>
-              <HandSwipeLeft size={28} weight="regular" />
-              <span>Drag to look around</span>
-            </div>
-          ) : null}
-
           <GuessMapPanel
             key={`map-${roundKey}`}
             location={state.location}

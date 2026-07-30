@@ -17,7 +17,7 @@ The order is locked:
 Agents must not mix these stages. Complete and validate the current stage before
 starting the next one.
 
-Active stage: **Phase B complete — awaiting user review. Phase C is not yet
+Active stage: **Phase C roster revision is complete. Phase D is not yet
 authorized**.
 
 ## Starting state
@@ -353,6 +353,23 @@ Begin only after Phases A and B pass.
   be produced quickly.
 - Reject events dependent on readable text, exact faces, or fragile geometry.
 
+## C1 completion record — July 30, 2026 (superseded July 31)
+
+The ordered session is locked to Boston Tea Party, the Wright brothers' first
+flight, the eruption of Vesuvius at Pompeii, the Storming of the Bastille, the
+sinking of RMS Titanic, the D-Day Normandy landings, the first ascent of Mount
+Everest, the Apollo 11 launch, the opening of the Berlin Wall at Bornholmer
+Strasse, and the Chernobyl disaster.
+
+This supersedes the first draft of C1 after the user asked for scenes based on
+events known by most players. Suez Canal, Dandi Salt March, and the opening of
+Sydney Opera House were removed from the required slate before runtime
+integration. The Hindenburg disaster is the first replacement candidate and
+the already prepared Chilean miners rescue is the second.
+`docs/scenes/scene-slate.md` records the order, canonical points, visual
+anchors, risks, sources for the replacements, and the rule to replace a failed
+event instead of extending tooling. Event lock does not imply asset acceptance.
+
 ## C2. Add scenes in small batches
 
 Eight additional accepted rounds are required to reach the release gate. Rounds
@@ -386,6 +403,135 @@ Before submission work:
 - every panorama is local and usable at runtime zoom;
 - every scene has accepted metadata and aliases;
 - every round has a recorded smoke test.
+
+## Phase C completion record — July 30, 2026 (superseded roster)
+
+C1 was relocked around globally recognisable events after user feedback. C2
+then added eight generated local panorama candidates and their scene modules,
+metadata, aliases, sources, explanations, checksums, and dossiers. The runtime
+order is Boston, Wright, Pompeii, Bastille, Titanic, D-Day, Everest, Apollo 11,
+Berlin Wall, and Chernobyl. The Chilean miners rescue remains a prepared backup
+and is not registered.
+
+The first Titanic candidate was rejected for a materially wrong sinking
+attitude and corrected once. The final browser pass also exposed weak opening
+cameras for Everest and Apollo 11; Everest was widened and Apollo was
+re-centred on the Saturn V, tower, and plume before the final rebuild.
+
+The compact integrity suite now enforces exactly 10 unique scene IDs, unique
+local panorama URLs, present asset files, complete metadata, valid coordinates,
+usable year ranges, and finite camera values. Common shorthand answers such as
+`Titanic`, `Apollo 11`, `Chernobyl`, and `Pompeii` are explicit aliases rather
+than fuzzy guesses. Direct ESLint, TypeScript, all 30 unit tests, the production
+Webpack build, local Markdown links, asset-dimension checks, and
+`git diff --check` passed.
+
+The production browser run completed all 10 rounds, reached `Session complete`,
+restarted to a clean Boston round, loaded one panorama canvas with no alert in
+every round, and left the browser console clean. A narrow `390 × 844` smoke
+check found no blocking overflow or clipped interactive control; dedicated
+mobile optimisation is intentionally deferred per user direction. The later
+alias-only patch was covered by the final 30-test, lint, TypeScript, and build
+run; the browser workflow was not repeated for that data-only change. A
+comprehensive seam-and-pole review remains Phase D submission QA.
+
+Phase D is not authorized in this session.
+
+## Phase C roster revision — July 31, 2026
+
+After reviewing the first generated roster, the user explicitly retained
+Boston Tea Party, the Storming of the Bastille, the Wright brothers' first
+flight, the sinking of RMS Titanic, and the first ascent of Mount Everest.
+Pompeii, D-Day, the Apollo 11 launch panorama, Bornholmer Strasse, Chernobyl,
+and the prepared Chilean-miners backup were rejected.
+
+The replacement session is locked in chronological order:
+
+1. fall of Constantinople, 1453;
+2. Boston Tea Party, 1773;
+3. adoption of the Declaration of Independence, 1776;
+4. Storming of the Bastille, 1789;
+5. Wright brothers' first flight, 1903;
+6. sinking of RMS Titanic, 1912;
+7. attack on Pearl Harbor, 1941;
+8. first ascent of Mount Everest, 1953;
+9. Vostok 1 and the first human spaceflight, 1961;
+10. Apollo 11 Moon landing, 1969.
+
+Five new local `2:1` panorama candidates, scene modules, aliases, explanations,
+and dossiers replace the rejected registered rounds. The Apollo 11 surface
+round is the only off-world exception: it uses an explicit `Moon` location
+choice, stores Tranquility Base in selenographic coordinates, keeps
+`distanceKm` as `null`, and never projects a false point onto the Earth map.
+
+The superseded uncommitted scene, panorama, and dossier triples must be moved
+to recoverable Trash only after all five replacements exist and pass static
+integrity checks. The final revision record must list the exact removed paths,
+asset checksums, correction decisions, automated validation, browser smoke,
+and remaining submission QA.
+
+## Phase C roster revision completion record — July 31, 2026
+
+The five replacement assets are registered and retain their exact generated
+bytes:
+
+- `fall-of-constantinople-panorama.png`:
+  `ec00033afafb284f0ce97fb81530d44baaab1812016a31bb9eb8e25690378316`;
+- `declaration-of-independence-panorama.png`:
+  `6bc12ccb337a2a46d1b4cd2612fc0b5ffed9b7ead291d528934bf4d4882f87ad`;
+- `pearl-harbor-attack-panorama.png`:
+  `81b5042a2fb02598d33f18410c1020e8f4b06248e51f6baa182360af84315ba1`;
+- `vostok-1-launch-panorama.png`:
+  `18ec72634e8626fea9e038083c7e60ba553d2cc28c46da410f1f3b0a4a29e32a`;
+- `apollo-11-moon-landing-panorama.png`:
+  `d4c5e9ba770be1a35a98702576f72fb4233f3967dd2a542b0c850b6de5dd1ad4`.
+
+Flat material review accepted Constantinople, the Declaration, Vostok 1, and
+the Moon landing without a retry. Pearl Harbor used its single focused
+correction after the first aircraft read as twin-engined; the accepted edit
+contains two modest single-engine aircraft and a submerged torpedo wake.
+
+The complete chronological 10-round session passed twice in the production
+browser: once at the default `1280 × 720` viewport and once with a `390 × 844`
+responsive override. Both runs reached `Session complete`; the desktop run
+also restarted to a clean first round. Every round rendered one panorama
+canvas with no application alert. The lunar round hid Tranquility Base until
+submission, enabled only after `Moon` was chosen, returned `Moon identified`,
+reported no Earth distance, and rendered no Earth result map. The browser
+console had no warning or error and the responsive DOM had no horizontal
+overflow. Exhaustive seam-and-pole review remains Phase D submission QA.
+
+Independent review then tightened the off-world contract before the final
+rerun: scene coordinates are now a discriminated Earth/geographic or
+Moon/selenographic union, submission requires the selected celestial body to
+match the scene, and the result stores `locationBodyCorrect`. The narrow lunar
+input and result layouts now reserve separate rows for their hints and labels;
+keyboard focus and reduced-motion coverage include the new controls.
+
+The rejected uncommitted triples were moved to recoverable system Trash:
+
+- `docs/scenes/eruption-of-mount-vesuvius.md`,
+  `public/images/eruption-of-mount-vesuvius-panorama.png`, and
+  `src/features/game/eruption-of-mount-vesuvius.ts`;
+- `docs/scenes/d-day-normandy-landings.md`,
+  `public/images/d-day-normandy-landings-panorama.png`, and
+  `src/features/game/d-day-normandy-landings.ts`;
+- `docs/scenes/apollo-11-launch.md`,
+  `public/images/apollo-11-launch-panorama.png`, and
+  `src/features/game/apollo-11-launch.ts`;
+- `docs/scenes/berlin-wall-opening.md`,
+  `public/images/berlin-wall-opening-panorama.png`, and
+  `src/features/game/berlin-wall-opening.ts`;
+- `docs/scenes/chernobyl-disaster.md`,
+  `public/images/chernobyl-disaster-panorama.png`, and
+  `src/features/game/chernobyl-disaster.ts`;
+- `docs/scenes/chilean-miners-rescue.md`,
+  `public/images/chilean-miners-rescue-panorama.png`, and
+  `src/features/game/chilean-miners-rescue.ts`.
+
+All 34 direct unit tests, ESLint, TypeScript, the production Webpack build,
+22 local Markdown links, exact image dimensions and checksums, and
+`git diff --check` passed. No commit or push is part of Phase C.
 
 # Phase D — Submission QA
 

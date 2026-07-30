@@ -28,9 +28,10 @@ function degreesToRadians(degrees: number) {
   return (degrees * Math.PI) / 180;
 }
 
-export function haversineDistanceKm(
+function sphericalDistanceKm(
   start: Coordinates,
   end: Coordinates,
+  radiusKm: number,
 ) {
   const latitudeDelta = degreesToRadians(end.lat - start.lat);
   const longitudeDelta = degreesToRadians(end.lng - start.lng);
@@ -46,7 +47,7 @@ export function haversineDistanceKm(
 
   return (
     2 *
-    EARTH_RADIUS_KM *
+    radiusKm *
     Math.atan2(
       Math.sqrt(clampedHaversine),
       Math.sqrt(1 - clampedHaversine),
@@ -54,13 +55,35 @@ export function haversineDistanceKm(
   );
 }
 
+export function haversineDistanceKm(
+  start: Coordinates,
+  end: Coordinates,
+) {
+  return sphericalDistanceKm(start, end, EARTH_RADIUS_KM);
+}
+
 export function evaluateAnswer(
   answer: PlayerAnswer,
   scene: Scene,
 ): RoundResult {
+  const correctBody = scene.location.body ?? "earth";
+  const answerBody = answer.location.body ?? "earth";
+  const locationBodyCorrect = answerBody === correctBody;
+  const distanceKm =
+    locationBodyCorrect &&
+    answer.location.body !== "moon" &&
+    correctBody === "earth"
+      ? sphericalDistanceKm(
+          answer.location,
+          scene.location,
+          EARTH_RADIUS_KM,
+        )
+      : null;
+
   return {
     eventCorrect: isAcceptedEventAnswer(answer.eventText, scene),
     yearDifference: Math.abs(answer.year - scene.year),
-    distanceKm: haversineDistanceKm(answer.location, scene.location),
+    locationBodyCorrect,
+    distanceKm,
   };
 }

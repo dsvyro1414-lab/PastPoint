@@ -12,6 +12,7 @@
   `60°` minimum vertical field-of-view limit. This preserves approximately the
   previous `69°` opening field of view while preventing close zoom.
 - Dimensions: `1774 × 887` (`2:1`, RGB PNG).
+- Bytes: `2,037,159`.
 - SHA-256:
   `8c877e7e6aed92a11b3a61a885b74e1563d5797224ef0bdc43ae2a8db53f6b02`
 

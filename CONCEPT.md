@@ -18,7 +18,8 @@ enough evidence to make an informed guess.
 1. Explore a full-screen 360° scene from one fixed viewpoint.
 2. Enter the event name without answer choices.
 3. Select a year on the horizontal year ruler.
-4. Place a marker on the world map.
+4. Place a marker on the world map, or identify an explicit off-world
+   location when a scene did not happen on Earth.
 5. Submit the answer.
 6. Review the correct event, year difference, geographic distance, and a short
    prepared explanation.
@@ -41,7 +42,8 @@ The MVP includes:
 
 - a short start screen and clear instructions;
 - at least 10 registered and playable scenes;
-- the event, year, and location guess in every round;
+- the event, year, and location guess in every round, with one lightweight
+  Moon exception rather than a false Earth coordinate;
 - deterministic transitions through the complete session;
 - per-round facts and explanations;
 - a final session-complete state and full restart;

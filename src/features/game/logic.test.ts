@@ -6,6 +6,7 @@ import {
   isAcceptedEventAnswer,
   normalizeAnswer,
 } from "./logic";
+import { scenes } from "./scenes";
 import { wrightBrothersFirstFlightScene } from "./wright-brothers-first-flight";
 
 describe("round evaluation", () => {
@@ -36,6 +37,22 @@ describe("round evaluation", () => {
     ).toBe(false);
   });
 
+  it.each([
+    ["fall-of-constantinople", "Constantinople 1453"],
+    ["declaration-of-independence", "Fourth of July"],
+    ["storming-of-the-bastille", "Bastille"],
+    ["titanic-sinking", "Titanic"],
+    ["pearl-harbor-attack", "Pearl Harbor"],
+    ["first-ascent-of-mount-everest", "Everest"],
+    ["vostok-1-first-human-spaceflight", "Gagarin"],
+    ["apollo-11-moon-landing", "Moon Landing"],
+  ])("accepts the recognizable shorthand for %s", (sceneId, answer) => {
+    const scene = scenes.find(({ id }) => id === sceneId);
+
+    expect(scene).toBeDefined();
+    expect(isAcceptedEventAnswer(answer, scene!)).toBe(true);
+  });
+
   it("returns zero distance for the same coordinates", () => {
     expect(
       haversineDistanceKm(
@@ -43,6 +60,52 @@ describe("round evaluation", () => {
         bostonTeaPartyScene.location,
       ),
     ).toBe(0);
+  });
+
+  it("evaluates the Moon round without projecting it onto Earth", () => {
+    const moonScene = scenes.find(
+      ({ id }) => id === "apollo-11-moon-landing",
+    );
+
+    expect(moonScene).toBeDefined();
+    expect(
+      evaluateAnswer(
+        {
+          eventText: "Apollo 11",
+          year: 1969,
+          location: {
+            body: "moon",
+          },
+        },
+        moonScene!,
+      ),
+    ).toEqual({
+      eventCorrect: true,
+      yearDifference: 0,
+      locationBodyCorrect: true,
+      distanceKm: null,
+    });
+  });
+
+  it("rejects an Earth location body for the Moon without calculating distance", () => {
+    const moonScene = scenes.find(
+      ({ id }) => id === "apollo-11-moon-landing",
+    );
+
+    expect(moonScene).toBeDefined();
+    expect(
+      evaluateAnswer(
+        {
+          eventText: "Apollo 11",
+          year: 1969,
+          location: bostonTeaPartyScene.location,
+        },
+        moonScene!,
+      ),
+    ).toMatchObject({
+      locationBodyCorrect: false,
+      distanceKm: null,
+    });
   });
 
   it("keeps the antipodal distance finite", () => {
@@ -68,6 +131,7 @@ describe("round evaluation", () => {
     ).toEqual({
       eventCorrect: true,
       yearDifference: 2,
+      locationBodyCorrect: true,
       distanceKm: 0,
     });
   });

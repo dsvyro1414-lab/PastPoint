@@ -1,4 +1,4 @@
-import type { Coordinates, Scene, Submission } from "./model";
+import type { LocationGuess, Scene, Submission } from "./model";
 
 export type SessionState = {
   roundIndex: number;
@@ -7,7 +7,7 @@ export type SessionState = {
   eventText: string;
   year: number;
   yearTouched: boolean;
-  location: Coordinates | null;
+  location: LocationGuess | null;
   mapMinimized: boolean;
   submission: Submission | null;
 };
@@ -15,7 +15,7 @@ export type SessionState = {
 export type SessionAction =
   | { type: "set-event"; value: string }
   | { type: "set-year"; value: number; touched: boolean }
-  | { type: "set-location"; value: Coordinates }
+  | { type: "set-location"; value: LocationGuess }
   | { type: "toggle-map" }
   | { type: "submit"; submission: Submission }
   | { type: "advance-round" }

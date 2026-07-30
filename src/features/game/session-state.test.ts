@@ -1,74 +1,104 @@
 import { describe, expect, it } from "vitest";
-import type { Submission } from "./model";
+import type { Scene, Submission } from "./model";
 import { scenes } from "./scenes";
 import {
   createInitialSessionState,
   createSessionReducer,
 } from "./session-state";
 
-const [bostonTeaPartyScene, wrightBrothersFirstFlightScene] = scenes;
+const [firstScene] = scenes;
 const reducer = createSessionReducer(scenes);
 
 const submission: Submission = {
   answer: {
-    eventText: "Boston Tea Party",
-    year: 1773,
-    location: bostonTeaPartyScene.location,
+    eventText: firstScene.event,
+    year: firstScene.year,
+    location: firstScene.location,
   },
   result: {
     eventCorrect: true,
     yearDifference: 0,
+    locationBodyCorrect: true,
     distanceKm: 0,
   },
 };
 
-const secondSubmission: Submission = {
-  answer: {
-    eventText: "Wright Brothers' First Flight",
-    year: 1903,
-    location: wrightBrothersFirstFlightScene.location,
-  },
-  result: {
-    eventCorrect: true,
-    yearDifference: 0,
-    distanceKm: 0,
-  },
-};
+function createSubmission(scene: Scene): Submission {
+  const isMoonScene = scene.location.body === "moon";
+
+  return {
+    answer: {
+      eventText: scene.event,
+      year: scene.year,
+      location: isMoonScene ? { body: "moon" } : scene.location,
+    },
+    result: {
+      eventCorrect: true,
+      yearDifference: 0,
+      locationBodyCorrect: true,
+      distanceKm: isMoonScene ? null : 0,
+    },
+  };
+}
 
 function createCompletedRound() {
   let state = createInitialSessionState(
-    bostonTeaPartyScene.round.initialYear,
+    firstScene.round.initialYear,
   );
 
   state = reducer(state, {
     type: "set-event",
-    value: "Boston Tea Party",
+    value: firstScene.event,
   });
   state = reducer(state, {
     type: "set-year",
-    value: 1773,
+    value: firstScene.year,
     touched: true,
   });
   state = reducer(state, {
     type: "set-location",
-    value: bostonTeaPartyScene.location,
+    value: firstScene.location,
   });
   state = reducer(state, { type: "toggle-map" });
 
   return reducer(state, { type: "submit", submission });
 }
 
+function completeSession() {
+  let state = createCompletedRound();
+
+  for (let index = 1; index < scenes.length; index += 1) {
+    const scene = scenes[index];
+    const roundSubmission = createSubmission(scene);
+
+    state = reducer(state, { type: "advance-round" });
+    state = reducer(state, {
+      type: "set-location",
+      value: roundSubmission.answer.location,
+    });
+    if (scene.location.body === "moon") {
+      state = reducer(state, { type: "toggle-map" });
+    }
+    state = reducer(state, {
+      type: "submit",
+      submission: roundSubmission,
+    });
+  }
+
+  return state;
+}
+
 describe("multi-round session state", () => {
   it("starts the first scene from its configured initial year", () => {
     expect(
       createInitialSessionState(
-        bostonTeaPartyScene.round.initialYear,
+        firstScene.round.initialYear,
       ),
     ).toMatchObject({
       roundIndex: 0,
       roundToken: 0,
       phase: "playing",
-      year: 1750,
+      year: firstScene.round.initialYear,
       yearTouched: false,
       location: null,
       submission: null,
@@ -85,7 +115,7 @@ describe("multi-round session state", () => {
       roundToken: 1,
       phase: "playing",
       eventText: "",
-      year: 1900,
+      year: scenes[1].round.initialYear,
       yearTouched: false,
       location: null,
       submission: null,
@@ -93,13 +123,7 @@ describe("multi-round session state", () => {
   });
 
   it("does not advance beyond the final scene", () => {
-    const finalRound = reducer(createCompletedRound(), {
-      type: "advance-round",
-    });
-    const completedFinalRound = reducer(finalRound, {
-      type: "submit",
-      submission: secondSubmission,
-    });
+    const completedFinalRound = completeSession();
 
     expect(
       reducer(completedFinalRound, { type: "advance-round" }),
@@ -107,23 +131,17 @@ describe("multi-round session state", () => {
   });
 
   it("restarts the full session at round one", () => {
-    const finalRound = reducer(createCompletedRound(), {
-      type: "advance-round",
-    });
-    const completedFinalRound = reducer(finalRound, {
-      type: "submit",
-      submission: secondSubmission,
-    });
+    const completedFinalRound = completeSession();
     const restarted = reducer(completedFinalRound, {
       type: "restart-session",
     });
 
     expect(restarted).toEqual({
       roundIndex: 0,
-      roundToken: 2,
+      roundToken: scenes.length,
       phase: "playing",
       eventText: "",
-      year: 1750,
+      year: firstScene.round.initialYear,
       yearTouched: false,
       location: null,
       mapMinimized: false,
@@ -131,9 +149,24 @@ describe("multi-round session state", () => {
     });
   });
 
+  it("clears the Moon choice and minimized panel on session restart", () => {
+    const completedFinalRound = completeSession();
+
+    expect(completedFinalRound.location).toEqual({ body: "moon" });
+    expect(completedFinalRound.mapMinimized).toBe(true);
+
+    expect(
+      reducer(completedFinalRound, { type: "restart-session" }),
+    ).toMatchObject({
+      location: null,
+      mapMinimized: false,
+      roundIndex: 0,
+    });
+  });
+
   it("cannot advance or restart an unfinished round", () => {
     const playing = createInitialSessionState(
-      bostonTeaPartyScene.round.initialYear,
+      firstScene.round.initialYear,
     );
 
     expect(reducer(playing, { type: "advance-round" })).toBe(playing);

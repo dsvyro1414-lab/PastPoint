@@ -3,6 +3,28 @@ export type Coordinates = {
   lng: number;
 };
 
+export type CelestialBody = "earth" | "moon";
+
+export type LocationGuess =
+  | (Coordinates & {
+      body?: "earth";
+    })
+  | {
+      body: "moon";
+    };
+
+export type SceneLocation =
+  | (Coordinates & {
+      body?: "earth";
+      coordinateSystem?: "geographic";
+      label: string;
+    })
+  | (Coordinates & {
+      body: "moon";
+      coordinateSystem: "selenographic";
+      label: string;
+    });
+
 export type YearRange = {
   min: number;
   max: number;
@@ -29,9 +51,7 @@ export type Scene = {
   acceptedEventAliases: string[];
   year: number;
   date: string;
-  location: Coordinates & {
-    label: string;
-  };
+  location: SceneLocation;
   explanation: string;
   round: RoundConfiguration;
 };
@@ -39,13 +59,14 @@ export type Scene = {
 export type PlayerAnswer = {
   eventText: string;
   year: number;
-  location: Coordinates;
+  location: LocationGuess;
 };
 
 export type RoundResult = {
   eventCorrect: boolean;
   yearDifference: number;
-  distanceKm: number;
+  locationBodyCorrect: boolean;
+  distanceKm: number | null;
 };
 
 export type Submission = {

@@ -7,6 +7,7 @@ import {
   CheckCircle,
   FlagCheckered,
   MapPin,
+  Moon,
   XCircle,
 } from "@phosphor-icons/react";
 import { MapCanvas } from "./MapCanvas";
@@ -28,6 +29,9 @@ export function ResultPanel({
 }: ResultPanelProps) {
   const { answer, result } = submission;
   const sessionComplete = primaryAction === "restart-session";
+  const locationBody = scene.location.body ?? "earth";
+  const earthAnswerLocation =
+    answer.location.body === "moon" ? null : answer.location;
   const primaryLabel =
     primaryAction === "next-round"
       ? "Next round"
@@ -98,10 +102,26 @@ export function ResultPanel({
               </span>
             </div>
             <div>
-              <MapPin size={24} weight="regular" aria-hidden="true" />
+              {locationBody === "moon" ? (
+                <Moon size={24} weight="regular" aria-hidden="true" />
+              ) : (
+                <MapPin size={24} weight="regular" aria-hidden="true" />
+              )}
               <span>
-                <small>Distance from the correct location</small>
-                <strong>{result.distanceKm.toFixed(1)} km</strong>
+                <small>
+                  {locationBody === "moon"
+                    ? "Off-world location"
+                    : "Distance from the correct location"}
+                </small>
+                <strong>
+                  {locationBody === "moon"
+                    ? result.locationBodyCorrect
+                      ? "Moon identified"
+                      : "Different world"
+                    : result.distanceKm === null
+                      ? "Different world"
+                      : `${result.distanceKm.toFixed(1)} km`}
+                </strong>
               </span>
             </div>
           </div>
@@ -128,27 +148,53 @@ export function ResultPanel({
           </div>
         </div>
 
-        <div className={styles.resultMapWrap}>
-          <MapCanvas
-            playerLocation={answer.location}
-            correctLocation={scene.location}
-            interactive={false}
-          />
-          <div className={styles.mapLegend}>
-            <span>
-              <MapPin size={18} weight="fill" aria-hidden="true" />
-              Your marker
-            </span>
-            <span>
-              <MapPin size={18} weight="fill" aria-hidden="true" />
-              Correct location
-            </span>
+        {locationBody === "moon" ? (
+          <div
+            className={`${styles.resultMapWrap} ${styles.lunarResultWrap}`}
+          >
+            <div className={styles.lunarResultBody}>
+              <span
+                className={`${styles.lunarOrb} ${styles.lunarResultOrb}`}
+                aria-hidden="true"
+              >
+                <span className={styles.lunarCraterOne} />
+                <span className={styles.lunarCraterTwo} />
+                <span className={styles.lunarCraterThree} />
+                <span className={styles.tranquilityMarker} />
+              </span>
+              <span>
+                <small>Correct celestial body</small>
+                <strong>The Moon</strong>
+              </span>
+            </div>
+            <p className={styles.correctLocationLabel}>
+              <Moon size={20} weight="fill" aria-hidden="true" />
+              {scene.location.label}
+            </p>
           </div>
-          <p className={styles.correctLocationLabel}>
-            <MapPin size={20} weight="fill" aria-hidden="true" />
-            {scene.location.label}
-          </p>
-        </div>
+        ) : (
+          <div className={styles.resultMapWrap}>
+            <MapCanvas
+              playerLocation={earthAnswerLocation}
+              correctLocation={scene.location}
+              interactive={false}
+            />
+            <div className={styles.mapLegend}>
+              <span>
+                <MapPin size={18} weight="fill" aria-hidden="true" />
+                Your marker
+              </span>
+              <span>
+                <MapPin size={18} weight="fill" aria-hidden="true" />
+                Correct location
+              </span>
+            </div>
+            <p className={styles.correctLocationLabel}>
+              <MapPin size={20} weight="fill" aria-hidden="true" />
+              {scene.location.label}
+            </p>
+          </div>
+        )}
       </section>
     </div>
   );

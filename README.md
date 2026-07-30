@@ -7,16 +7,25 @@ when.
 ## Hackathon target
 
 The hackathon MVP is a complete session with at least **10 playable historical
-rounds**. The working target is 12 scenes.
+rounds**. The release-gate session now contains all 10; two extra rounds remain
+optional stretch work rather than a blocker.
 
-The project currently contains two playable prototype rounds:
+The current ordered session contains:
 
-1. Boston Tea Party;
-2. Wright brothers' first powered flight.
+1. fall of Constantinople;
+2. Boston Tea Party;
+3. adoption of the Declaration of Independence;
+4. Storming of the Bastille;
+5. Wright brothers' first powered flight;
+6. sinking of RMS Titanic;
+7. attack on Pearl Harbor;
+8. first ascent of Mount Everest;
+9. Vostok 1 and the first human spaceflight;
+10. Apollo 11 Moon landing.
 
-Both use the same reusable session engine and HUD. Before submission, content
-may be prepared manually. A stable automated scene-generation pipeline is
-deliberately postponed until after the hackathon.
+All rounds use the same reusable session engine and HUD. Scene preparation is
+manual for the hackathon; a stable automated generation pipeline is
+deliberately postponed.
 
 ## Current gameplay
 
@@ -24,7 +33,8 @@ deliberately postponed until after the hackathon.
 - rotate and zoom a full-screen 360° panorama;
 - enter the event name without answer choices;
 - select a year on a draggable ruler;
-- place a marker on the world map;
+- place a marker on the world map, with one explicit Moon choice for the
+  off-world Apollo 11 round;
 - submit only after all three inputs are complete;
 - review event correctness, year difference, geographic distance, and a
   prepared explanation;
@@ -64,10 +74,8 @@ location guessing requires a network connection.
 src/app/
   page.tsx                 loads the ordered scene list
 src/features/game/
-  boston-tea-party.ts      first scene data
-  wright-brothers-first-flight.ts
-                           second scene data
-  scenes.ts                ordered readonly scene list
+  *.ts                     individual scene data and game components
+  scenes.ts                ordered 10-scene readonly list
   session-state.ts         advance and full-session restart state
   model.ts                 scene, answer, and result types
   logic.ts                 answer normalization and distance calculation
@@ -83,14 +91,18 @@ assets and scene configuration, without rewriting the HUD.
 
 ## Panorama status
 
-The two current `1774 × 887` panoramas are interaction prototypes. Hackathon
-scenes need to be recognizable, free of material visual failures, and usable in
-the existing viewer; native 4K or 8K output is not a submission requirement.
+The Boston and Wright `1774 × 887` panoramas remain interaction prototypes.
+The eight added panoramas are generated hackathon candidates. The retained
+Bastille, Titanic, and Everest candidates previously passed static material
+review and desktop opening-view smoke; the five replacement candidates now pass
+the same runtime opening-view smoke, including the Moon-specific input and
+result path. Native 4K or 8K output is not a submission requirement.
 
 Scene-specific facts and review notes live in:
 
 - [Boston Tea Party dossier](./docs/scenes/boston-tea-party.md);
-- [Wright brothers dossier](./docs/scenes/wright-brothers-first-flight.md).
+- [Wright brothers dossier](./docs/scenes/wright-brothers-first-flight.md);
+- [ordered 10-round scene slate](./docs/scenes/scene-slate.md).
 
 The completed Skybox provider investigation is preserved as
 [archived experiment evidence](./docs/experiments/skybox-api-panorama-generation.md).

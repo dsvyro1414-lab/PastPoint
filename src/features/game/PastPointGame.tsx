@@ -22,6 +22,7 @@ import {
   createInitialSessionState,
   createSessionReducer,
 } from "./session-state";
+import { LunarLocationPanel } from "./LunarLocationPanel";
 import { YearRuler } from "./YearRuler";
 import styles from "./game.module.css";
 
@@ -43,7 +44,7 @@ function StartScreen({ roundCount, onStart }: StartScreenProps) {
       <header className={styles.startHeader}>
         <span className={styles.brand}>PASTPOINT</span>
         <span className={styles.startRoundPill}>
-          {roundCount}-round preview
+          {roundCount}-round session
         </span>
       </header>
 
@@ -98,7 +99,7 @@ function StartScreen({ roundCount, onStart }: StartScreenProps) {
             <span>
               <small>Where</small>
               <strong>Pin the location</strong>
-              <span>Place one marker on the world map.</span>
+              <span>Use the world map or identify an off-world site.</span>
             </span>
           </li>
         </ol>
@@ -135,11 +136,17 @@ export function PastPointGame({ scenes }: PastPointGameProps) {
   const roundCount = scenes.length;
   const hasNextRound = roundNumber < roundCount;
   const roundKey = state.roundToken;
+  const locationBody = scene.location.body ?? "earth";
+  const selectedLocationBody =
+    state.location === null
+      ? null
+      : state.location.body ?? "earth";
 
   const canSubmit =
     state.eventText.trim().length > 0 &&
     state.yearTouched &&
-    state.location !== null;
+    state.location !== null &&
+    selectedLocationBody === locationBody;
 
   const startSession = () => {
     setExperiencePhase("session");
@@ -202,15 +209,29 @@ export function PastPointGame({ scenes }: PastPointGameProps) {
 
       {state.phase === "playing" ? (
         <>
-          <GuessMapPanel
-            key={`map-${roundKey}`}
-            location={state.location}
-            minimized={state.mapMinimized}
-            onLocationChange={(value) =>
-              dispatch({ type: "set-location", value })
-            }
-            onToggleMinimized={() => dispatch({ type: "toggle-map" })}
-          />
+          {locationBody === "moon" ? (
+            <LunarLocationPanel
+              key={`moon-${roundKey}`}
+              location={state.location}
+              minimized={state.mapMinimized}
+              onLocationChange={(value) =>
+                dispatch({ type: "set-location", value })
+              }
+              onToggleMinimized={() => dispatch({ type: "toggle-map" })}
+            />
+          ) : (
+            <GuessMapPanel
+              key={`map-${roundKey}`}
+              location={
+                state.location?.body === "moon" ? null : state.location
+              }
+              minimized={state.mapMinimized}
+              onLocationChange={(value) =>
+                dispatch({ type: "set-location", value })
+              }
+              onToggleMinimized={() => dispatch({ type: "toggle-map" })}
+            />
+          )}
 
           <div className={styles.answerDock}>
             <label className={styles.eventPanel}>

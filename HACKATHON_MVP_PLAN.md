@@ -12,7 +12,9 @@ Until submission:
 - the project will not build a stable high-volume generation pipeline;
 - no provider, 8K, tiling, or provenance system is a release dependency.
 
-The working target is 12 scenes. The hard release gate is 10.
+The hard release gate remains 10 scenes. The user re-locked the exact roster on
+July 31 after rejecting five first-pass candidates. The replacement roster is
+registered and the complete gate has been revalidated before submission work.
 
 Detailed task order, active-stage status, and agent handoffs live in
 `AGENT_EXECUTION_PLAN.md`. This document owns MVP scope and release gates; the
@@ -20,20 +22,25 @@ execution plan owns the current task sequence.
 
 ## Current baseline
 
-The application currently has:
+The application now has:
 
-- two playable rounds: Boston Tea Party and the Wright brothers' first flight;
+- ten registered rounds spanning the fall of Constantinople in 1453 through
+  the Apollo 11 Moon landing in 1969;
 - one reusable data-driven session engine;
 - a lightweight start screen with the complete control instructions;
 - event, year, and map input;
 - raw event correctness, year difference, and geographic distance;
 - next-round, explicit session-complete, and full restart transitions;
 - concise panorama and online-map failure guidance;
-- responsive desktop and mobile layouts;
+- responsive desktop layout and a passing `390 × 844` smoke result;
 - unit tests and a previously completed manual browser regression.
 
-Both runtime panoramas are prototypes. They prove interaction and engine reuse,
-but they still need a quick submission-focused content decision.
+The Boston and Wright runtime panoramas remain prototypes. Bastille, Titanic,
+and Everest are retained generated candidates from the first roster. Five new
+replacement panoramas cover Constantinople, the Declaration of Independence,
+Pearl Harbor, Vostok 1, and the Apollo 11 Moon landing. Their flat material
+review and wrapped opening-view smoke are recorded separately rather than
+inherited from the superseded roster.
 
 ## Definition of the MVP
 
@@ -94,18 +101,22 @@ chance of producing a readable panorama quickly.
 
 | Round | Event | Asset | Metadata | Registered | Smoke test | Status |
 | ---: | --- | --- | --- | --- | --- | --- |
-| 1 | Boston Tea Party | prototype | ready | yes | passed previously | needs submission asset decision |
-| 2 | Wright brothers' first flight | prototype | ready | yes | passed previously | needs quick content review |
-| 3 | TBD | missing | missing | no | no | backlog |
-| 4 | TBD | missing | missing | no | no | backlog |
-| 5 | TBD | missing | missing | no | no | backlog |
-| 6 | TBD | missing | missing | no | no | backlog |
-| 7 | TBD | missing | missing | no | no | backlog |
-| 8 | TBD | missing | missing | no | no | backlog |
-| 9 | TBD | missing | missing | no | no | backlog |
-| 10 | TBD | missing | missing | no | no | release gate |
-| 11 | TBD | missing | missing | no | no | target buffer |
-| 12 | TBD | missing | missing | no | no | target buffer |
+| 1 | [Fall of Constantinople](./docs/scenes/fall-of-constantinople.md) | replacement candidate | ready | yes | passed | integrated opening round |
+| 2 | [Boston Tea Party](./docs/scenes/boston-tea-party.md) | prototype | ready | yes | passed previously | needs submission asset decision |
+| 3 | [Adoption of the Declaration of Independence](./docs/scenes/declaration-of-independence.md) | replacement candidate | ready | yes | passed | July 4 adoption, not later signing |
+| 4 | [Storming of the Bastille](./docs/scenes/storming-of-the-bastille.md) | retained candidate | ready | yes | passed previously | integrated |
+| 5 | [Wright brothers' first flight](./docs/scenes/wright-brothers-first-flight.md) | prototype | ready | yes | passed previously | needs quick content review |
+| 6 | [Sinking of RMS Titanic](./docs/scenes/titanic-sinking.md) | retained corrected candidate | ready | yes | passed previously | integrated |
+| 7 | [Attack on Pearl Harbor](./docs/scenes/pearl-harbor-attack.md) | corrected replacement | ready | yes | passed | one focused aircraft correction accepted |
+| 8 | [First ascent of Mount Everest](./docs/scenes/first-ascent-of-mount-everest.md) | retained candidate | ready | yes | passed previously | calibrated and integrated |
+| 9 | [Vostok 1 first human spaceflight](./docs/scenes/vostok-1-first-human-spaceflight.md) | replacement candidate | ready | yes | passed | launch at Baikonur Site No. 1 |
+| 10 | [Apollo 11 Moon landing](./docs/scenes/apollo-11-moon-landing.md) | replacement candidate | ready | yes | passed | explicit off-world input and result passed |
+
+The detailed order, replacement triggers, and visual anchors are locked in the
+[scene slate](./docs/scenes/scene-slate.md). No backup event is currently
+approved. If one of the five replacements fails its single correction timebox,
+return to the user for a new event rather than silently restoring a rejected
+candidate.
 
 ## Manual content workflow
 

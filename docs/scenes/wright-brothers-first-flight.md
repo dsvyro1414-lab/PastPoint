@@ -2,7 +2,7 @@
 
 ## Status
 
-- Gameplay status: registered as round 2 in the preview session.
+- Gameplay status: round 2 in the ordered scene list.
 - Historical status: research-backed prototype, not yet independently
   certified.
 - Panorama status: generated interaction asset, not a final production master.

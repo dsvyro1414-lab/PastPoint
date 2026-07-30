@@ -15,27 +15,21 @@ import styles from "./game.module.css";
 type ResultPanelProps = {
   scene: Scene;
   submission: Submission;
-  showReplayRound: boolean;
   primaryAction: "next-round" | "restart-session";
-  onReplayRound: () => void;
   onPrimaryAction: () => void;
 };
 
 export function ResultPanel({
   scene,
   submission,
-  showReplayRound,
   primaryAction,
-  onReplayRound,
   onPrimaryAction,
 }: ResultPanelProps) {
   const { answer, result } = submission;
   const primaryLabel =
     primaryAction === "next-round"
       ? "Next round"
-      : showReplayRound
-        ? "Restart session"
-        : "Play again";
+      : "Restart session";
 
   return (
     <div className={styles.resultBackdrop}>
@@ -100,20 +94,6 @@ export function ResultPanel({
           <p className={styles.explanation}>{scene.explanation}</p>
 
           <div className={styles.resultActions}>
-            {showReplayRound ? (
-              <button
-                className={styles.replayRoundButton}
-                type="button"
-                onClick={onReplayRound}
-              >
-                <ArrowCounterClockwise
-                  size={21}
-                  weight="bold"
-                  aria-hidden="true"
-                />
-                Replay round
-              </button>
-            ) : null}
             <button
               className={styles.playAgainButton}
               type="button"

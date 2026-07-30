@@ -3,7 +3,6 @@
 import {
   ArrowsOutSimple,
   CheckCircle,
-  Crosshair,
   MapTrifold,
   Minus,
   Plus,
@@ -81,13 +80,6 @@ export function GuessMapPanel({
           aria-label="Zoom map out"
         >
           <Minus size={22} weight="regular" aria-hidden="true" />
-        </button>
-        <button
-          type="button"
-          onClick={() => mapRef.current?.resetView()}
-          aria-label="Reset map view"
-        >
-          <Crosshair size={21} weight="regular" aria-hidden="true" />
         </button>
       </div>
 

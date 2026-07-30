@@ -71,8 +71,7 @@
   letter-spacing: -0.03em;
 }
 
-.roundPill,
-.timer {
+.roundPill {
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -91,18 +90,6 @@
 .roundPill {
   font-size: 17px;
   font-weight: 520;
-}
-
-.timer {
-  position: absolute;
-  left: 50%;
-  gap: 10px;
-  min-width: 134px;
-  transform: translateX(-50%);
-  font-size: 24px;
-  font-weight: 680;
-  font-variant-numeric: tabular-nums;
-  letter-spacing: 0.01em;
 }
 
 .panoramaCue {
@@ -471,8 +458,7 @@
 }
 
 .submitButton,
-.playAgainButton,
-.replayRoundButton {
+.playAgainButton {
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -504,8 +490,7 @@
 }
 
 .submitButton:not(:disabled):hover,
-.playAgainButton:hover,
-.replayRoundButton:hover {
+.playAgainButton:hover {
   background: #fff;
   transform: translateY(-2px);
 }
@@ -520,7 +505,6 @@
 
 .submitButton:focus-visible,
 .playAgainButton:focus-visible,
-.replayRoundButton:focus-visible,
 .mapTopControls button:focus-visible,
 .mapZoomControls button:focus-visible,
 .mapRestoreButton:focus-visible {
@@ -663,22 +647,12 @@
   gap: 12px;
 }
 
-.playAgainButton,
-.replayRoundButton {
+.playAgainButton {
   min-height: 52px;
   align-self: flex-start;
   padding: 0 23px;
   border-radius: 16px;
   font-size: 16px;
-}
-
-.replayRoundButton {
-  color: rgba(255, 255, 255, 0.88);
-  background: rgba(255, 255, 255, 0.08);
-}
-
-.replayRoundButton:hover {
-  background: rgba(255, 255, 255, 0.14);
 }
 
 .resultMapWrap {
@@ -822,13 +796,6 @@
     font-size: 14px;
   }
 
-  .timer {
-    top: 54px;
-    min-width: 112px;
-    min-height: 42px;
-    font-size: 19px;
-  }
-
   .mapPanel {
     top: 112px;
     width: min(310px, calc(100vw - 24px));
@@ -869,10 +836,6 @@
 
   .roundPill {
     margin-right: 0;
-  }
-
-  .timer {
-    top: 52px;
   }
 
   .panoramaCue {
@@ -1058,7 +1021,6 @@
   .panoramaCue,
   .submitButton,
   .playAgainButton,
-  .replayRoundButton,
   .mapTopControls button,
   .mapZoomControls button,
   .mapRestoreButton {

@@ -1,16 +1,12 @@
 import { describe, expect, it } from "vitest";
-import { bostonTeaPartyScene } from "./boston-tea-party";
 import type { Submission } from "./model";
+import { scenes } from "./scenes";
 import {
   createInitialSessionState,
   createSessionReducer,
 } from "./session-state";
-import { wrightBrothersFirstFlightScene } from "./wright-brothers-first-flight";
 
-const scenes = [
-  bostonTeaPartyScene,
-  wrightBrothersFirstFlightScene,
-] as const;
+const [bostonTeaPartyScene, wrightBrothersFirstFlightScene] = scenes;
 const reducer = createSessionReducer(scenes);
 
 const submission: Submission = {
@@ -81,24 +77,6 @@ describe("multi-round session state", () => {
     });
   });
 
-  it("replays the current round with every transient value reset", () => {
-    const completed = createCompletedRound();
-    const replayed = reducer(completed, { type: "replay-round" });
-
-    expect(replayed).toEqual({
-      roundIndex: 0,
-      roundToken: 1,
-      phase: "playing",
-      eventText: "",
-      year: 1750,
-      yearTouched: false,
-      location: null,
-      mapMinimized: false,
-      panoramaCueVisible: true,
-      submission: null,
-    });
-  });
-
   it("advances deterministically and uses the next scene configuration", () => {
     const advanced = reducer(createCompletedRound(), {
       type: "advance-round",
@@ -157,12 +135,11 @@ describe("multi-round session state", () => {
     });
   });
 
-  it("cannot replay, advance, or restart an unfinished round", () => {
+  it("cannot advance or restart an unfinished round", () => {
     const playing = createInitialSessionState(
       bostonTeaPartyScene.round.initialYear,
     );
 
-    expect(reducer(playing, { type: "replay-round" })).toBe(playing);
     expect(reducer(playing, { type: "advance-round" })).toBe(playing);
     expect(reducer(playing, { type: "restart-session" })).toBe(playing);
   });

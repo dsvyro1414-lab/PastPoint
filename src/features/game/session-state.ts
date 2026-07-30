@@ -20,7 +20,6 @@ export type SessionAction =
   | { type: "toggle-map" }
   | { type: "panorama-interacted" }
   | { type: "submit"; submission: Submission }
-  | { type: "replay-round" }
   | { type: "advance-round" }
   | { type: "restart-session" };
 
@@ -83,16 +82,6 @@ export function createSessionReducer(
               submission: action.submission,
             }
           : state;
-      case "replay-round":
-        if (state.phase !== "result") {
-          return state;
-        }
-
-        return resetRound(
-          state,
-          state.roundIndex,
-          scenes[state.roundIndex].round.initialYear,
-        );
       case "advance-round": {
         if (state.phase !== "result") {
           return state;

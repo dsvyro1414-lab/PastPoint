@@ -1,0 +1,399 @@
+# PastPoint — Agent Execution Plan
+
+## Authority and scope
+
+This is the authoritative next-session handoff for agents.
+
+Document hierarchy:
+
+1. `CONCEPT.md` defines the product.
+2. `HACKATHON_MVP_PLAN.md` defines the submission scope.
+3. This file defines the required execution order.
+
+The order is locked:
+
+`cleanup and simplification -> minimal product additions -> 8+ new rounds -> submission QA`
+
+Agents must not mix these stages. Complete and validate the current stage before
+starting the next one.
+
+Active stage: **Phase A complete — awaiting user review. Phase B is not yet
+authorized**.
+
+## Starting state
+
+- Canonical checkout: `/Users/davidskroba/Projects/PastPoint`.
+- Current Git branch: `main`.
+- Current committed HEAD at handoff creation: `2c0649b`.
+- The working tree is intentionally dirty.
+- Product-document changes in `CONCEPT.md`, `README.md`,
+  `HACKATHON_MVP_PLAN.md`, and the removal of the obsolete planning files are
+  intentional and must be preserved.
+- `.gitignore`, `package.json`, `artifacts/`, `scripts/`, and the Boston dossier
+  also contain uncommitted pipeline-era work that Phase A must resolve.
+- There are no intended uncommitted changes under `src/` at handoff creation.
+
+Before any edit:
+
+1. Verify the real working directory.
+2. Read `CONCEPT.md`, `HACKATHON_MVP_PLAN.md`, this file, and `README.md`.
+3. Inspect `git status --short --branch`, the complete diff, and all untracked
+   paths.
+4. Preserve unrelated user work.
+5. Never use `git reset --hard`, `git clean`, or a broad checkout command.
+6. Do not commit or push unless the user explicitly requests it.
+
+## Global stop rules
+
+- Do not call Skybox, OpenAI, or another generation provider during cleanup.
+- Do not run a paid generation command.
+- Do not add a new provider integration.
+- Do not build a content pipeline, schema framework, mode system, router-based
+  start flow, persistence layer, scoring system, or browser-test framework.
+- Do not redesign the working HUD.
+- Do not replace the current runtime panoramas during Phase A.
+- Use a recoverable Trash operation for untracked scripts and generated
+  artifacts after their exact paths and runtime references have been verified.
+- If a target differs from the paths documented below, stop and report the
+  mismatch instead of widening the deletion scope.
+
+# Phase A — Cleanup and simplification
+
+Phase A is the only implementation stage authorized for the next cleanup
+session. Do not begin Phase B in the same run unless the user explicitly asks to
+continue after reviewing the Phase A handoff.
+
+## A0. Record the cleanup baseline
+
+Record:
+
+- Git status and diff;
+- file counts and sizes under `scripts/skybox/` and `artifacts/`;
+- current package scripts and dependencies;
+- the two-round gameplay baseline;
+- the current test, lint, and build status if the required local toolchain is
+  available.
+
+Do not treat a pre-existing failure as a cleanup regression.
+
+## A1. Remove provider-specific tooling and generated artifacts
+
+The Skybox experiment is complete and is not part of the hackathon MVP.
+
+After confirming that no runtime source imports these paths:
+
+1. Recompute and compare the adjacent manifest checksum for each rejected
+   Skybox binary:
+   - `artifacts/skybox/boston-tea-party/15582329/master-8k.png`;
+   - `artifacts/skybox/boston-tea-party/15582337/master-8k.png`;
+   - `artifacts/skybox/wright-brothers-first-flight/15582320/master-8k.png`.
+2. Confirm that every adjacent final manifest still marks the candidate as
+   rejected.
+3. Move those three exact PNG files to Trash individually. Do not target a
+   directory or wildcard, and do not empty Trash.
+4. Preserve the small Skybox JSON manifests and request metadata as archived
+   evidence.
+5. Preserve `artifacts/openai/`. Its composition is non-runtime evidence that
+   may be reconsidered after submission.
+6. Remove the `skybox` command from `package.json`.
+7. Update the archived runbook to say that the executable source is being
+   retired and that the rejected binary masters were removed from the active
+   workspace after checksum verification.
+8. Move the exact `scripts/skybox/` directory to Trash only after removing its
+   package entrypoint and confirming that `src/` has no import or runtime
+   dependency on it.
+9. Replace the Skybox-specific artifact ignores in `.gitignore` with one
+   provider-neutral `/artifacts/` rule.
+10. Keep `docs/experiments/skybox-api-panorama-generation.md` as compact
+    archived evidence.
+11. Update the archived experiment and Boston dossier so they do not claim that
+    trashed binaries or executable sources still exist. Preserve useful IDs,
+    prompts, hashes, outcomes, and rejection reasons in text.
+
+Do not remove:
+
+- `public/images/boston-tea-party-panorama.png`;
+- `public/images/wright-brothers-first-flight-panorama.png`;
+- either registered scene file;
+- source references or review conclusions.
+
+Acceptance:
+
+- `scripts/skybox/` no longer exists in the active project;
+- the three rejected Skybox 8K binaries no longer exist at their source paths;
+- manifests and OpenAI evidence remain intact under ignored `artifacts/`;
+- `package.json` exposes no paid provider command;
+- no Markdown link or instruction depends on a removed artifact;
+- no runtime import or asset URL is broken.
+
+Stop without deleting a target if its checksum, review decision, tracked state,
+runtime references, or exact path differs from this plan. If Trash fails, do not
+fall back to `rm`.
+
+## A2. Remove unused scaffold dependencies
+
+The application uses CSS Modules, not Tailwind utilities.
+
+1. Remove `@import "tailwindcss"` from `src/app/globals.css`.
+2. Remove `tailwindcss` and `@tailwindcss/postcss` from `devDependencies`.
+3. Update `pnpm-lock.yaml` using pnpm rather than editing dependency blocks by
+   hand.
+4. Delete `postcss.config.mjs` if it contains only the Tailwind plugin.
+5. Delete `next.config.ts` if it remains an empty placeholder.
+
+Acceptance:
+
+- no Tailwind import or dependency remains;
+- plain global CSS and CSS Modules still compile;
+- dependency installation and production build still succeed.
+
+## A3. Remove non-essential game behaviour
+
+### Remove the decorative timer
+
+The timer reaches zero without changing the round. The MVP will be untimed.
+
+Remove:
+
+- `src/features/game/CountdownTimer.tsx`;
+- timer rendering in `PastPointGame.tsx`;
+- `timerDurationSeconds` from session types and configuration;
+- timer validation and tests;
+- timer-only CSS and icon imports.
+
+Do not replace it with timeout semantics.
+
+### Remove per-round replay
+
+The hackathon session is linear.
+
+- Remove the `replay-round` action.
+- Remove the replay button and single-round compatibility labels.
+- Keep `Next round` for non-final rounds.
+- Keep full-session restart after the final round.
+- Update reducer tests and factual documentation.
+
+### Remove one duplicate map reset control
+
+`GuessMapPanel` currently exposes two controls that call `resetView()`. Keep one
+clear reset action and remove the duplicate markup, icon import, and related CSS
+only.
+
+### Preserve onboarding until Phase B
+
+Do not remove the 360° onboarding cue during Phase A. It remains the only
+in-product instruction until the start screen exists.
+
+## A4. Simplify the fixed-session scene architecture
+
+The hackathon has one ordered session. It does not need string IDs to be resolved
+through a separate runtime registry.
+
+Target structure:
+
+```text
+individual scene files
+  -> scenes.ts with one ordered readonly Scene[]
+  -> PastPointGame
+  -> session-state reducer
+```
+
+Required changes:
+
+1. Keep one file per scene.
+2. Add `src/features/game/scenes.ts` with one ordered scene array.
+3. Pass the ordered scenes directly to `PastPointGame`.
+4. Remove `GameSessionDefinition`, `ResolvedGameSession`,
+   `PanoramaOnboarding`, the lookup registry, and string-based session
+   resolution.
+5. Keep per-scene year range and initial panorama view.
+6. Keep the pure session reducer and `roundToken` reset mechanism.
+7. Replace the large registry test suite with one compact table-driven scene
+   integrity test.
+
+The integrity test should check only immediate manual-content risks:
+
+- at least one scene during Phase A;
+- unique non-empty IDs;
+- non-empty event, aliases, panorama URL, location label, and explanation;
+- finite coordinates within valid ranges;
+- valid year range containing both initial and correct years;
+- finite initial yaw, pitch, and zoom.
+
+Do not introduce Zod, JSON Schema, generated manifests, or a versioned package
+format.
+
+## A5. Phase A validation gate
+
+Run:
+
+```bash
+pnpm lint
+pnpm test
+pnpm build
+git diff --check
+```
+
+Then perform one manual browser pass:
+
+1. Open Boston.
+2. Complete event, year, and map input.
+3. Submit and advance.
+4. Verify Wright opens with clean inputs, map, ruler, panorama, and onboarding.
+5. Complete Wright.
+6. Verify full-session restart returns to clean Boston.
+7. Check one narrow mobile viewport for blocking overlap.
+8. Confirm the browser console has no new errors or warnings.
+
+The Phase A handoff must separate:
+
+- removed;
+- simplified;
+- preserved;
+- validation passed;
+- validation blocked;
+- uncommitted work remaining.
+
+Stop after this handoff unless the user explicitly authorizes Phase B.
+
+## Phase A completion record — July 30, 2026
+
+Phase A removed the retired provider tooling and checksum-verified rejected
+binaries, unused Tailwind scaffold, decorative timer, per-round replay, one
+duplicate map reset, and the string-based scene registry. The ordered scene
+array, reducer, `roundToken`, onboarding, scene-specific ranges/views, JSON
+evidence, OpenAI evidence, and runtime panoramas remain.
+
+Dependency installation, lint, 14 unit tests, the production Webpack build,
+`git diff --check`, the complete two-round browser workflow, final restart, and
+the `390 × 844` responsive check passed. Phase B remains blocked pending
+explicit user authorization.
+
+# Phase B — Minimal product additions
+
+Begin only after Phase A passes and the user authorizes continuation.
+
+## B1. Add a lightweight start screen
+
+- Use one local start/session phase.
+- Show the one-sentence pitch.
+- Explain the event, year, and location guesses.
+- Include concise panorama, ruler, and map instructions.
+- Include one `Start game` action.
+- Do not add routing, modes, persistence, authentication, or settings.
+
+When the start screen is accepted, remove the per-round panorama onboarding
+state, action, interaction listeners, markup, and CSS. Instructions should not
+repeat on every round.
+
+## B2. Add a clear final session state
+
+- Reuse the existing final result surface.
+- On the last round, show explicit `Session complete` copy.
+- Offer full-session restart.
+- Do not add score, result history, aggregate statistics, or persistence before
+  the 10-round gate.
+
+## B3. Add minimal failure messages
+
+- Catch panorama initialization failures and show a concise retry/reload message.
+- Catch map initialization failures.
+- Keep the existing online CARTO basemap for the hackathon.
+- Document that map tiles require network access.
+- Do not build an offline basemap or tile pipeline.
+
+## B4. Phase B validation gate
+
+- Repeat lint, tests, build, and `git diff --check`.
+- Manually verify start -> Boston -> Wright -> session complete -> restart.
+- Verify that onboarding instructions appear on the start screen and do not
+  repeat in each round.
+- Verify map and panorama failure copy without adding a new framework.
+
+Stop and hand off before producing new scenes unless the user explicitly
+authorizes Phase C.
+
+# Phase C — Content expansion
+
+Begin only after Phases A and B pass.
+
+## C1. Lock the scene slate
+
+- Select 10 required events total, including Boston and Wright.
+- Select two backup events.
+- Prefer strong visual anchors, different eras and regions, and scenes that can
+  be produced quickly.
+- Reject events dependent on readable text, exact faces, or fragile geometry.
+
+## C2. Add scenes in small batches
+
+Eight additional accepted rounds are required to reach the release gate. Rounds
+11 and 12 are buffers, not blockers.
+
+For every scene:
+
+1. Record one or two sources.
+2. Record event, aliases, year, coordinates, location, explanation, initial
+   camera view, and year range.
+3. Produce the fastest usable local 2:1 panorama.
+4. Reject only material historical, stereotype, readability, seam, or projection
+   failures.
+5. Add the scene file and ordered-array entry.
+6. Run the compact integrity test.
+7. Smoke-test the round.
+
+Work in batches of two or three. After every batch, run the full session from
+Boston through the newest scene.
+
+Do not restart provider research or build reusable generation tooling. Replace a
+stubborn event when that is faster.
+
+## C3. Ten-round gate
+
+Before submission work:
+
+- at least 10 unique rounds are playable;
+- the complete ordered session reaches the final state;
+- every round resets all transient state;
+- every panorama is local and usable at runtime zoom;
+- every scene has accepted metadata and aliases;
+- every round has a recorded smoke test.
+
+# Phase D — Submission QA
+
+Only after the ten-round gate:
+
+- run final lint, tests, and production build;
+- complete a desktop end-to-end pass;
+- check the narrow mobile layout;
+- check map network failure behaviour;
+- review console output;
+- audit secrets and publish scope;
+- update README, screenshots, and submission material;
+- commit or push only with explicit user authorization.
+
+## Explicitly deferred until after submission
+
+- automated generation and finishing;
+- provider evaluation;
+- Scene Studio;
+- 4K/8K masters and tiled delivery;
+- scoring and aggregate statistics;
+- Classic or Expert modes;
+- daily sessions;
+- accounts, leaderboards, multiplayer, and persistence;
+- automated browser infrastructure;
+- production-grade historical certification.
+
+## Required handoff format
+
+Every stage handoff must report:
+
+- completed work;
+- removed or moved-to-Trash paths;
+- validation passed;
+- validation blocked or not run;
+- intentionally preserved work;
+- current `git status`;
+- uncommitted and unpushed changes;
+- the next stage, clearly marked as authorized or not yet authorized.

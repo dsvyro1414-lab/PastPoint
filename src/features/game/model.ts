@@ -36,22 +36,6 @@ export type Scene = {
   round: RoundConfiguration;
 };
 
-export type PanoramaOnboarding = {
-  label: string;
-  instruction: string;
-};
-
-export type GameSessionDefinition = {
-  id: string;
-  sceneIds: readonly string[];
-  timerDurationSeconds: number;
-  panoramaOnboarding: PanoramaOnboarding | null;
-};
-
-export type ResolvedGameSession = GameSessionDefinition & {
-  scenes: readonly [Scene, ...Scene[]];
-};
-
 export type PlayerAnswer = {
   eventText: string;
   year: number;

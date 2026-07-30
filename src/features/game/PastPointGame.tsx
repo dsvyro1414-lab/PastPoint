@@ -10,10 +10,9 @@ import {
   useMemo,
   useReducer,
 } from "react";
-import { CountdownTimer } from "./CountdownTimer";
 import { GuessMapPanel } from "./GuessMapPanel";
 import { evaluateAnswer } from "./logic";
-import type { ResolvedGameSession } from "./model";
+import type { Scene } from "./model";
 import { PanoramaViewer } from "./PanoramaViewer";
 import { ResultPanel } from "./ResultPanel";
 import {
@@ -24,28 +23,24 @@ import { YearRuler } from "./YearRuler";
 import styles from "./game.module.css";
 
 type PastPointGameProps = {
-  session: ResolvedGameSession;
+  scenes: readonly [Scene, ...Scene[]];
 };
 
-export function PastPointGame({ session }: PastPointGameProps) {
-  return <ConfiguredGameSession key={session.id} session={session} />;
-}
-
-function ConfiguredGameSession({ session }: PastPointGameProps) {
+export function PastPointGame({ scenes }: PastPointGameProps) {
   const sessionReducer = useMemo(
-    () => createSessionReducer(session.scenes),
-    [session.scenes],
+    () => createSessionReducer(scenes),
+    [scenes],
   );
   const [state, dispatch] = useReducer(
     sessionReducer,
-    session.scenes[0].round.initialYear,
+    scenes[0].round.initialYear,
     createInitialSessionState,
   );
-  const scene = session.scenes[state.roundIndex];
+  const scene = scenes[state.roundIndex];
   const roundNumber = state.roundIndex + 1;
-  const roundCount = session.scenes.length;
+  const roundCount = scenes.length;
   const hasNextRound = roundNumber < roundCount;
-  const roundKey = `${session.id}-${state.roundToken}`;
+  const roundKey = state.roundToken;
 
   const canSubmit =
     state.eventText.trim().length > 0 &&
@@ -95,19 +90,15 @@ function ConfiguredGameSession({ session }: PastPointGameProps) {
             Round {roundNumber} of {roundCount}
           </span>
         </div>
-        <CountdownTimer
-          key={`timer-${roundKey}`}
-          durationSeconds={session.timerDurationSeconds}
-        />
       </header>
 
       {state.phase === "playing" ? (
         <>
-          {state.panoramaCueVisible && session.panoramaOnboarding ? (
+          {state.panoramaCueVisible ? (
             <div className={styles.panoramaCue} aria-hidden="true">
-              <strong>{session.panoramaOnboarding.label}</strong>
+              <strong>360°</strong>
               <HandSwipeLeft size={28} weight="regular" />
-              <span>{session.panoramaOnboarding.instruction}</span>
+              <span>Drag to look around</span>
             </div>
           ) : null}
 
@@ -161,9 +152,7 @@ function ConfiguredGameSession({ session }: PastPointGameProps) {
         <ResultPanel
           scene={scene}
           submission={state.submission}
-          showReplayRound={roundCount > 1}
           primaryAction={hasNextRound ? "next-round" : "restart-session"}
-          onReplayRound={() => dispatch({ type: "replay-round" })}
           onPrimaryAction={() =>
             dispatch({
               type: hasNextRound ? "advance-round" : "restart-session",

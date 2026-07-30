@@ -9,7 +9,11 @@
 - Mobile viewport: `390 × 844` CSS pixels.
 - State: two-round Boston Tea Party and Wright first-flight preview.
 
-## Final browser evidence
+The sections below preserve the pre-Phase-A browser baseline. References to the
+timer and per-round replay describe that historical build, not the current
+runtime.
+
+## Pre-Phase-A browser evidence
 
 The complete two-round desktop workflow and the previously verified mobile
 layout were rendered in the Codex in-app browser. The primary workflow was
@@ -120,4 +124,35 @@ Multi-round transitions use both real registered scenes in unit coverage and
 have now passed a manual production-browser regression. A repository-owned
 automated browser test remains follow-up work.
 
-final result: pass
+pre-Phase-A result: pass
+
+## Phase A cleanup regression — July 30, 2026
+
+The Phase A production build passed a fresh manual browser workflow:
+
+1. Boston opened as `Round 1 of 2` with onboarding, an empty event, no map
+   marker, the `1750` initial year, and a disabled submit button. No decorative
+   timer was present.
+2. Entering `Boston Tea Party`, moving the ruler to `1773`, and placing a map
+   marker enabled submission and produced the expected raw result.
+3. The Boston result exposed `Next round` without a per-round replay action.
+4. Wright opened as `Round 2 of 2` with an empty event, no marker, the `1900`
+   initial year, its `1800–2000` range, the configured opening panorama, and
+   the onboarding cue.
+5. Completing Wright at `1903` produced the final result with one `Restart
+   session` action.
+6. Restart returned to clean Boston at `1750`, restored onboarding, removed the
+   marker, and disabled submit.
+
+The location panel exposed one whole-world reset action plus zoom and minimize
+controls; the duplicate reset was absent.
+
+At `390 × 844`, the document had no horizontal or vertical overflow. Measured
+bounds confirmed no blocking overlap between onboarding and the map, event
+input and ruler, or ruler and submit. All primary controls remained within the
+viewport.
+
+The browser console reported no warnings or errors during the complete workflow
+and responsive check.
+
+Phase A result: pass

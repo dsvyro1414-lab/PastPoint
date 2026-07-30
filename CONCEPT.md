@@ -1,151 +1,119 @@
 # PastPoint
 
-## Концепция
+## Product
 
-PastPoint — иммерсивная историческая игра в формате GeoGuessr. Вместо современной улицы игрок оказывается внутри панорамной реконструкции исторического события, осматривает окружение и пытается определить:
+PastPoint is a GeoGuessr-style history game. The player explores a panoramic
+reconstruction of a historical event and determines:
 
-- что происходит;
-- в каком году это произошло;
-- где это произошло.
+- what happened;
+- when it happened;
+- where it happened.
 
-Главное отличие от обычной викторины: игрок не отвечает на вопрос по тексту, а самостоятельно исследует сцену и делает вывод по визуальным деталям — одежде, архитектуре, транспорту, предметам и окружению.
+The game is based on visual investigation rather than a text quiz. Clothing,
+architecture, transport, objects, landscape, and human activity should provide
+enough evidence to make an informed guess.
 
-## Короткий pitch
+## Core round
 
-> **PastPoint is a GeoGuessr-style history game where players explore AI-created historical scenes and determine what happened, where, and when.**
+1. Explore a full-screen 360° scene from one fixed viewpoint.
+2. Enter the event name without answer choices.
+3. Select a year on the horizontal year ruler.
+4. Place a marker on the world map.
+5. Submit the answer.
+6. Review the correct event, year difference, geographic distance, and a short
+   prepared explanation.
+7. Continue to the next round.
 
-## Основной игровой цикл
+The interface stays secondary to the scene. There is no walking, runtime chat,
+or required interaction with clue hotspots.
 
-1. Игрок попадает в полноэкранную 360°-сцену с одной фиксированной точки обзора.
-2. Осматривает панораму с помощью мыши, touch-жестов или trackpad.
-3. Вручную вводит название события без вариантов ответа.
-4. Выбирает год с помощью горизонтальной крутилки.
-5. Ставит маркер на интерактивной карте.
-6. Нажимает `Submit Answer`.
-7. Получает правильное событие, год, место и короткое AI-сгенерированное объяснение того, как сцену можно было определить.
+## Hackathon MVP
 
-На первом этапе очки не рассчитываются. Игра сохраняет только фактический результат:
+The hackathon MVP is a complete playable game session with **at least 10
+distinct historical rounds**.
 
-- правильно ли указано событие;
-- насколько отличается выбранный год;
-- как далеко поставлен маркер.
+The operational target is 12 rounds so that one or two weak scenes can be
+removed without falling below the release gate. A broad, coherent session is
+more important before submission than one perfect scene or a sophisticated
+content-production system.
 
-Система очков, соревнования и лидерборды появятся позднее.
+The MVP includes:
 
-## Целевой дизайн
+- a short start screen and clear instructions;
+- at least 10 registered and playable scenes;
+- the event, year, and location guess in every round;
+- deterministic transitions through the complete session;
+- per-round facts and explanations;
+- a final session-complete state and full restart;
+- local assets with no generation request during gameplay;
+- desktop support and a usable narrow-screen layout.
 
-![Целевой интерфейс игрового раунда](docs/design/pastpoint-game-interface-reference.png)
+The MVP does not require:
 
-Из референса сохраняются:
+- a stable or automated scene-generation pipeline;
+- a specific image provider;
+- native 8K masters, tiled delivery, or automated spherical finishing;
+- accounts, profiles, leaderboards, or multiplayer;
+- a backend, database, or analytics;
+- runtime AI judging;
+- Classic and Expert modes;
+- a complex scoring system.
 
-- историческая сцена на весь экран;
-- минимальный тёмный интерфейс поверх панорамы;
-- логотип и номер раунда слева сверху;
-- таймер по центру;
-- небольшая интерактивная карта справа сверху;
-- крупная горизонтальная шкала года снизу;
-- основная кнопка отправки справа снизу;
-- стеклянные полупрозрачные панели;
-- короткая подсказка по управлению 360° при первом запуске.
+A simple aggregate score may be added only after 10 complete rounds work from
+start to finish. Raw facts remain the stable result contract.
 
-Из текущего MVP исключаются Score и профиль пользователя. Поле ручного ввода события размещается слева над шкалой года. Постоянная маркировка AI-реконструкции в игровом интерфейсе не используется.
+## Scene quality bar
 
-## Роль AI
+Every hackathon scene must:
 
-AI не выступает чат-ботом внутри игры. Он используется как система производства исторических заданий.
+- communicate a recognizable event through multiple visual clues;
+- use the correct year, location, accepted aliases, and explanation;
+- avoid obvious modern anachronisms and harmful stereotypes;
+- use a local 2:1 panorama that remains readable at the runtime zoom level;
+- avoid a disruptive horizontal seam or projection failure in normal play;
+- open with useful evidence in view;
+- pass a short manual round smoke test.
 
-### Scene Director
+Production-grade historical certification is not required before the hackathon,
+but obvious factual failures must not be knowingly presented as correct.
 
-LLM получает историческое событие и подготовленные источники, после чего создаёт структурированный blueprint:
+When a scene is difficult to generate, the preferred response before submission
+is to replace the event with a more visually achievable one, not to build new
+infrastructure.
 
-- место и время действия;
-- положение камеры;
-- обязательные элементы сцены;
-- недопустимые исторические детали;
-- визуальные признаки события;
-- допустимые названия события;
-- текст объяснения после ответа.
+## Role of AI
 
-### Panorama Generator
+AI helps create scene compositions, visual blueprints, aliases, and prepared
+explanations. This work happens before publication.
 
-Специализированная image-модель превращает blueprint в сферическую equirectangular-панораму. Сцена генерируется заранее, проверяется и только после этого добавляется в игру.
+The player interacts with the game, not with an AI assistant. Provider choice,
+generation automation, upscaling, provenance tooling, and batch production are
+implementation concerns rather than the product itself.
 
-### Game Content
+Before the hackathon, content may be produced manually or with lightweight
+batch assistance. A stable high-volume pipeline is a post-submission project.
 
-LLM также подготавливает:
+## Product principles
 
-- правильные данные события;
-- варианты допустимого написания ответа;
-- краткое объяснение того, как определить событие;
-- будущие настройки сложности.
+- The scene comes before the interface.
+- The player investigates before answering.
+- The event must be visually identifiable.
+- A finished 10+ round session beats a perfect single scene.
+- Manual content work is acceptable for the hackathon.
+- Technical infrastructure must solve an immediate game need.
+- Historical credibility matters, but review depth stays proportional to the
+  submission.
+- AI scales the content; it is not the player-facing experience.
 
-AI не оценивает свободный ответ во время текущего MVP. Название события проверяется локально по нормализованному списку допустимых ответов.
+## After the hackathon
 
-## Первый vertical slice: Boston Tea Party
+Post-submission development may add:
 
-- Событие: Boston Tea Party.
-- Дата: 16 декабря 1773 года.
-- Место: Griffin's Wharf, Boston, Massachusetts.
-- Сцена: Бостонская гавань ночью, деревянный причал, торговые парусные корабли XVIII века, колонисты и ящики с чаем, сбрасываемые в воду.
-
-Игровые данные:
-
-- правильный год: `1773`;
-- приблизительные координаты: `42.3515, -71.0514`;
-- допустимые ответы:
-  - `Boston Tea Party`;
-  - `The Boston Tea Party`;
-  - `Бостонское чаепитие`.
-
-После отправки ответа игрок видит короткое объяснение:
-
-> The tea chests, colonial merchant ships, nighttime harbor setting, and eighteenth-century clothing point toward the Boston Tea Party, which took place in Boston on December 16, 1773.
-
-Отдельные hotspot-подсказки, автоматическое вращение камеры к уликам и визуальная разметка объектов пока не используются.
-
-## Границы MVP
-
-В первой рабочей версии есть:
-
-- один исторический раунд;
-- одна 360°-панорама;
-- ручной ввод события;
-- крутилка года;
-- интерактивная карта;
-- отправка ответа;
-- результат и AI-объяснение;
-- повторный запуск раунда.
-
-В первой версии нет:
-
-- очков;
-- вариантов ответа;
-- аккаунтов;
-- профилей;
-- лидерборда;
-- realtime multiplayer;
-- перемещения между точками;
-- 3D, VR и NPC;
-- генерации панорамы во время игры;
-- отдельного backend или базы данных.
-
-## Будущее развитие
-
-После завершения Boston Tea Party vertical slice:
-
-1. Добавить ещё несколько тщательно проверенных событий.
-2. Создать Classic и Expert режимы.
-3. Ввести единый расчёт очков по событию, времени и расстоянию.
-4. Добавить одинаковые daily-наборы для всех игроков.
-5. Реализовать комнаты друзей и лидерборды.
-6. Соединить несколько панорам одного события в исторический маршрут.
-7. Создать внутренний Scene Studio для генерации и проверки нового контента.
-
-## Принципы продукта
-
-- Сначала исследование сцены, затем ответ.
-- Минимум интерфейса во время осмотра.
-- AI создаёт контент, но не отвлекает игрока чат-интерфейсом.
-- Сцены проходят ручную проверку перед публикацией.
-- Историческая правдоподобность важнее количества сцен.
-- Один законченный игровой раунд важнее большого незавершённого каталога.
+- a versioned and automated scene-production pipeline;
+- stronger historical review and provenance;
+- higher-resolution masters and optimized delivery;
+- more events and curated collections;
+- scoring, Classic and Expert modes, and daily sessions;
+- accounts, leaderboards, friend rooms, and multiplayer;
+- multi-panorama historical routes;
+- an internal Scene Studio.

@@ -3,17 +3,19 @@
 ## Status
 
 - Phase C2 batch: 1.
-- Runtime session order: round 5.
+- Runtime session order: round 6.
 - Runtime asset:
   `public/images/titanic-sinking-panorama.png`.
-- Asset status: generated hackathon candidate; accepted for integration after
-  one focused correction, material visual review, and desktop opening-view
-  smoke. A full seam-and-pole sweep remains submission QA.
-- Generation method: built-in OpenAI image generation through Codex.
+- Asset status: accepted generated hackathon candidate after material review,
+  opening-view smoke, full wrap review, and a targeted zenith repair.
+- Generation method: built-in OpenAI image generation through Codex plus a
+  deterministic upper-sky composite.
+- Zenith repair record:
+  [Titanic zenith repair](./titanic-zenith-repair.md).
 - Dimensions: `1774 × 887` (`2:1`, RGB PNG).
-- Bytes: `1,936,010`.
+- Bytes: `1,837,557`.
 - SHA-256:
-  `c254e91083730395fce34557fa47e6eb37d6441c6d01cc72c826ea0596472725`.
+  `ed29d7d66775ea0393bb65c5f15e484ff5de5731e06bc361f12b32d7382cf6ae`.
 
 ## Canonical scene facts
 
@@ -55,12 +57,14 @@ Forbidden:
 | Non-graphic treatment | pass | passengers remain distant and no victim or injury is shown |
 | Text and portrait dependence | pass | identification does not require a ship name, caption, or face |
 | Runtime opening view | pass | the bow-down liner, raised stern, funnels, lifeboat viewpoint, and cold night are readable together |
-| Equirectangular delivery | candidate | exact 2:1 frame and level horizon; a full seam-and-pole sweep remains submission QA |
+| Equirectangular delivery | pass after zenith repair | exact 2:1 frame, continuous seam, clean dark zenith, and coherent nadir in the production viewer |
 
 The first candidate was rejected because its visible hull attitude made the
 ship appear to sink stern-first. One focused edit corrected that material
-error. Material decision: **accept the corrected candidate for hackathon
-integration**. This is a generated reconstruction rather than documentary
+error. Phase D later found a radial star vortex at the zenith; a second targeted
+repair replaced only the upper polar sky and preserved the accepted scene below
+the blend. Runtime decision: **accept the repaired candidate for hackathon
+submission**. This is a generated reconstruction rather than documentary
 evidence.
 
 ## Generation prompt

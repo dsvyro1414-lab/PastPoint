@@ -8,21 +8,21 @@ Apollo launch, Bornholmer Strasse, Chernobyl, and Chilean-miners candidates.
 
 An approved event does not automatically accept its panorama. Every replacement
 now has a local `2:1` asset, complete metadata, flat material review, and a
-passing wrapped opening-view smoke test. Exhaustive seam-and-pole review remains
-submission QA.
+passing wrapped opening-view smoke test. Phase D added targeted full rotations,
+seam crossings, and pole checks for the higher-risk runtime scenes.
 
 ## Required session
 
 | Order | Stable ID | Event | Year | Canonical location | Primary visual anchors | Production status |
 | ---: | --- | --- | ---: | --- | --- | --- |
-| 1 | `fall-of-constantinople` | Fall of Constantinople | 1453 | Theodosian Land Walls, Constantinople | double walls and ditch, breach, Ottoman bombards, opposing forces | replacement candidate; runtime opening passed |
-| 2 | `boston-tea-party` | Boston Tea Party | 1773 | Griffin's Wharf, Boston, USA | merchant deck, opened tea chests, wharf, controlled night action | playable prototype; submission asset decision remains |
-| 3 | `declaration-of-independence` | Adoption of the Declaration of Independence | 1776 | Pennsylvania State House, Philadelphia, USA | Assembly Room, colony tables, Windsor chairs, approved manuscript | replacement candidate; runtime opening passed |
-| 4 | `storming-of-the-bastille` | Storming of the Bastille | 1789 | Bastille fortress site, Paris, France | fortress towers, drawbridge, armed crowd, smoke without graphic injury | retained candidate; previous desktop smoke passed |
+| 1 | `fall-of-constantinople` | Fall of Constantinople | 1453 | Theodosian Land Walls, Constantinople | double walls and ditch, breach, Ottoman bombards, opposing forces | replacement candidate; Phase D wrap/pole pass |
+| 2 | `boston-tea-party` | Boston Tea Party | 1773 | Griffin's Wharf, Boston, USA | merchant deck, opened tea chests, wharf, controlled night action | accepted replacement; material/wrap/pole/desktop/mobile pass |
+| 3 | `declaration-of-independence` | Adoption of the Declaration of Independence | 1776 | Pennsylvania State House, Philadelphia, USA | Assembly Room, colony tables, Windsor chairs, approved manuscript | replacement candidate; Phase D wrap/pole pass |
+| 4 | `storming-of-the-bastille` | Storming of the Bastille | 1789 | Bastille fortress site, Paris, France | fortress towers, drawbridge, armed crowd, smoke without graphic injury | retained candidate; Phase D wrap/pole pass |
 | 5 | `wright-brothers-first-flight` | Wright brothers' first flight | 1903 | Kill Devil Hills, USA | Flyer, launch rail, dunes, prone pilot and ground assistant | playable prototype; anatomy review remains |
-| 6 | `titanic-sinking` | Sinking of RMS Titanic | 1912 | North Atlantic wreck area | bow-down liner, iceberg, lifeboats, period deck fittings | retained corrected candidate; previous desktop smoke passed |
+| 6 | `titanic-sinking` | Sinking of RMS Titanic | 1912 | North Atlantic wreck area | bow-down liner, iceberg, lifeboats, period deck fittings | retained corrected candidate; targeted zenith repair and Phase D wrap/pole pass |
 | 7 | `pearl-harbor-attack` | Attack on Pearl Harbor | 1941 | Battleship Row, Pearl Harbor, USA | Ford Island, battleships, carrier aircraft, torpedo wakes, smoke | corrected replacement; runtime opening passed |
-| 8 | `first-ascent-of-mount-everest` | First ascent of Mount Everest | 1953 | Mount Everest summit | two roped climbers, 1953 oxygen equipment, narrow summit | retained calibrated candidate; previous desktop smoke passed |
+| 8 | `first-ascent-of-mount-everest` | First ascent of Mount Everest | 1953 | Mount Everest summit | two roped climbers, 1953 oxygen equipment, narrow summit | retained calibrated candidate; Phase D wrap/pole pass |
 | 9 | `vostok-1-first-human-spaceflight` | Vostok 1: first human spaceflight | 1961 | Baikonur Cosmodrome Site No. 1, Kazakhstan | Vostok launcher, tapered boosters, gantries, open steppe | replacement candidate; runtime opening passed |
 | 10 | `apollo-11-moon-landing` | Apollo 11 Moon landing | 1969 | Tranquility Base, Moon | `Eagle`, two astronauts, ladder, flag, surface equipment | replacement candidate; off-world runtime path passed |
 

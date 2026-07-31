@@ -7,11 +7,12 @@
   `http://127.0.0.1:3000/`.
 - Desktop viewport: `1536 × 1024` CSS pixels.
 - Mobile viewport: `390 × 844` CSS pixels.
-- State: two-round Boston Tea Party and Wright first-flight preview.
+- Current state: ordered 10-round release-gate session.
 
-The sections below preserve the pre-Phase-A browser baseline. References to the
-timer and per-round replay describe that historical build, not the current
-runtime.
+The sections through Phase B preserve the earlier two-round browser baseline.
+References to the timer, per-round replay, and Boston-first order describe
+historical builds, not the current runtime. The current 10-round evidence is
+recorded at the end of this file.
 
 ## Pre-Phase-A browser evidence
 
@@ -188,3 +189,140 @@ message.
 The final production browser console contained no warnings or errors.
 
 Phase B result: pass
+
+## Phase C roster-revision regression — July 31, 2026
+
+The revised chronological session contains Constantinople, Boston,
+Declaration adoption, Bastille, Wright first flight, Titanic, Pearl Harbor,
+Everest, Vostok 1, and the Apollo 11 Moon landing.
+
+All 10 local runtime panoramas decode as `1774 × 887` PNG files. The five
+replacement checksums match the accepted hashes in `AGENT_EXECUTION_PLAN.md`.
+Each scene rendered one panorama canvas at its configured opening view, exposed
+complete event/year/location input, produced the raw result contract, and
+advanced without leaking transient state.
+
+The Moon round uses an explicit off-world location choice. It does not render
+an Earth result map or report an Earth distance, and the exact Tranquility Base
+label is revealed only after submission.
+
+Phase C roster-revision result: pass
+
+## Phase D submission QA — July 31, 2026
+
+### Automated gate
+
+The final local source passed:
+
+- ESLint;
+- all 34 Vitest tests;
+- TypeScript with `--noEmit`;
+- the Next.js 16.2.12 production Webpack build;
+- `git diff --check`.
+
+The `pnpm lint` wrapper was attempted first, but the local non-TTY shell stopped
+inside pnpm's dependency-status check with
+`ERR_PNPM_ABORTED_REMOVE_MODULES_DIR_NO_TTY` before ESLint ran. The checked-in
+local binaries were then run directly. No dependency was installed or updated.
+
+### Production-browser session
+
+The final production build passed a complete session at `1280 × 720` and a
+second complete session at `390 × 844`:
+
+1. The start screen rendered meaningful content and one `Start game` action.
+2. Every round rendered exactly one panorama canvas with no application alert.
+3. The canonical event and correct year were accepted in all 10 rounds.
+4. Earth rounds enabled submission only after a map marker was placed.
+5. The lunar round enabled submission only after the Moon was selected.
+6. Every result reported an identified event and zero-year difference.
+7. The final result rendered `Session complete`, `Moon identified`, and no
+   Earth result map.
+8. Restart returned to a clean Constantinople round at `1450`, with no marker
+   and a disabled submit action.
+
+The browser console contained no warning or error during either clean run. A
+separate `1536 × 1024` smoke check also rendered one canvas with no alert or
+document overflow.
+
+At `390 × 844`, the start screen, all 10 playing states, all 10 result states,
+and final restart stayed at a `390px` document width. The final result panel is
+intentionally internally scrollable; its restart action was visible, reachable,
+and passed the restart check.
+
+### Keyboard regression fixed
+
+Phase D found that Photo Sphere Viewer's `keyboard: "always"` mode installs a
+global keyboard listener, so arrow and page keys used in game inputs could also
+move or zoom the panorama. Keyboard control is now disabled globally and
+enabled only while the focusable panorama owns focus.
+
+A fixed-build pixel check confirmed:
+
+- an arrow key in the event input caused no panorama change;
+- `ArrowRight` while the panorama owned focus changed the rendered view;
+- the browser console remained clean.
+
+The lunar selected-state hint was also tightened so it no longer names
+Tranquility Base before submission.
+
+### Failure-state regression
+
+A temporary diagnostic production build used known-missing local panorama and
+tile URLs. It rendered:
+
+- `Panorama unavailable` with reload guidance;
+- `Map unavailable` with connection/reload guidance;
+- no framework error overlay.
+
+The diagnostic URL substitutions were reverted before the final build. The
+expected diagnostic 404 console entries are not part of the clean-run console
+result.
+
+### Scene and publish-scope review
+
+All 10 flat `2:1` assets, opening frames, wrap-edge sectors, and top/bottom pole
+regions were reviewed together. A targeted production-viewer pass then
+completed full horizontal rotations, explicit seam crossings, and zenith/nadir
+inspection for Constantinople, Declaration, Bastille, Titanic, and Everest.
+The first Titanic pole pass exposed a visible radial star vortex at maximum
+upward pitch. Its upper sky was repaired without changing the accepted ship,
+lifeboats, horizon, water, or lower scene, and the exact maximum-pitch recheck
+then passed with a clean dark zenith. Exact maximum-pitch checks for
+Constantinople, Bastille, and Everest also passed. No visible wrap jump,
+projection hole, remaining pole ring, or submission-blocking geometry break
+remains. Expected equirectangular compression remains visible near some
+nadirs, and Wright retains its documented aircraft-anatomy review, but neither
+is a release blocker for this MVP.
+
+The rejected Boston control was replaced with a new OpenAI-built reconstruction
+at the same `1774 × 887` runtime path. The replacement shows an organized
+work party opening chests and emptying loose tea from a modest merchant vessel;
+all participants remain on the ship or wharf, with low Georgian waterfront
+architecture around the harbor. It passed the material checklist, flat edge
+comparison, full production-viewer rotation, seam crossing, zenith/nadir
+inspection, and `1280 × 720` / `390 × 844` opening-view checks. The opening
+camera is yaw `56°`, pitch `0°`, zoom `71`. Its exact prompt, checksum, and
+acceptance record are preserved in
+`docs/scenes/boston-tea-party-runtime-v2-prompt.md`.
+
+The Titanic repair prompts, deterministic upper-sky composite boundary,
+checksum, and acceptance evidence are preserved in
+`docs/scenes/titanic-zenith-repair.md`.
+
+A final browser run after the replacement again completed all ten rounds,
+reached `Session complete`, preserved the Apollo Moon result, and restarted to
+clean Constantinople.
+
+`.env.local` remains ignored, no environment file is tracked, and runtime
+source contains no `process.env` or `NEXT_PUBLIC_` reference. The only gameplay
+network dependency remains the documented CARTO basemap.
+
+QA screenshots were captured outside the repository working tree. A selected
+Devpost thumbnail and release screenshot are prepared separately as publication
+assets. Commit, push, production deployment, and Devpost submission were
+explicitly authorized after the QA pass.
+
+Phase D functional QA result: pass
+
+Phase D submission content gate: **pass**

@@ -23,6 +23,7 @@ export function PanoramaViewer({
   resetKey,
 }: PanoramaViewerProps) {
   const containerRef = useRef<HTMLDivElement>(null);
+  const viewerRef = useRef<PhotoSphereViewer | null>(null);
   const [failure, setFailure] = useState<{
     panoramaUrl: string;
     resetKey: number;
@@ -41,16 +42,19 @@ export function PanoramaViewer({
     async function createViewer() {
       try {
         const { Viewer } = await import("@photo-sphere-viewer/core");
+        const activeContainer = containerRef.current;
 
-        if (cancelled || !containerRef.current) {
+        if (cancelled || !activeContainer) {
           return;
         }
 
         viewer = new Viewer({
-          container: containerRef.current,
+          container: activeContainer,
           panorama: panoramaUrl,
           navbar: false,
-          keyboard: "always",
+          // Enable Photo Sphere Viewer's global keyboard listener only while
+          // the panorama itself is focused, so form and map keys stay native.
+          keyboard: false,
           mousewheel: true,
           mousewheelCtrlKey: false,
           touchmoveTwoFingers: false,
@@ -68,6 +72,7 @@ export function PanoramaViewer({
           canvasBackground: "#07101a",
           loadingTxt: "",
         });
+        viewerRef.current = viewer;
         viewer.addEventListener("panorama-error", () => {
           if (!cancelled) {
             viewer?.hideError();
@@ -85,6 +90,11 @@ export function PanoramaViewer({
 
     return () => {
       cancelled = true;
+
+      if (viewerRef.current === viewer) {
+        viewerRef.current = null;
+      }
+
       viewer?.destroy();
     };
   }, [
@@ -105,8 +115,10 @@ export function PanoramaViewer({
         ref={containerRef}
         className={styles.panorama}
         data-testid="panorama-viewer"
-        aria-label="Interactive 360 degree historical panorama. Drag to look around and scroll to zoom."
+        aria-label="Interactive 360 degree historical panorama. Focus and use arrow keys, or drag to look around. Scroll to zoom."
         tabIndex={0}
+        onFocus={() => viewerRef.current?.startKeyboardControl()}
+        onBlur={() => viewerRef.current?.stopKeyboardControl()}
       />
       {hasFailed ? (
         <div className={styles.viewerFailure} role="alert">

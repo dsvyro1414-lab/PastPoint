@@ -2,20 +2,21 @@
 
 ## Status
 
-- Gameplay status: round 1 in the ordered scene list.
+- Gameplay status: round 2 in the ordered scene list.
 - Runtime control:
   `public/images/boston-tea-party-panorama.png`.
-- Control status: interaction prototype; historically rejected as a production
-  composition.
+- Runtime status: accepted replacement after material, wrap, pole, desktop, and
+  mobile viewer review on July 31, 2026.
+- Runtime generation record:
+  [Boston Tea Party runtime v2](./boston-tea-party-runtime-v2-prompt.md).
 - OpenAI composition candidate:
   `artifacts/openai/boston-tea-party/2026-07-30/composition-candidate-v1.png`.
-- Candidate status: composition candidate that passed material review; not a
-  runtime asset and not a hackathon release blocker.
+- Candidate status: historical composition candidate; superseded by runtime v2.
 - Rejected Skybox generations `15582329` and `15582337` remain documented in
   the [archived experiment](../experiments/skybox-api-panorama-generation.md).
   Their manifests and request metadata remain; the checksum-verified binary
   masters were moved from the active workspace to recoverable Trash.
-- The current runtime file remains unchanged.
+- The original rejected runtime control is preserved in Git history.
 
 ## Canonical scene facts
 
@@ -80,21 +81,35 @@ Forbidden:
 
 ## OpenAI asset inventory
 
-### Runtime control
+### Runtime v2 — accepted replacement
 
 - Path: `public/images/boston-tea-party-panorama.png`.
+- Dimensions: `1774 × 887` (`2:1`, RGB PNG).
+- Bytes: `2,100,502`.
+- SHA-256:
+  `5be2ba14d2d4dc1c878fa4dc11a0558b7c954ff509465e1afa613b5f665732a5`.
+- Provider: OpenAI through the Codex built-in image-generation interface.
+- Model/version and provider generation ID: not exposed by the interface.
+- Exact prompt and acceptance evidence:
+  [runtime v2 generation record](./boston-tea-party-runtime-v2-prompt.md).
+
+The accepted runtime shows a controlled work party opening tea chests and
+emptying loose tea into the harbor from a modest merchant vessel. People remain
+on the ship and wharf, the vessel does not read as a warship, and the surrounding
+low Georgian waterfront gives the scene an immediately legible colonial-port
+context.
+
+### Original runtime control — replaced
+
 - Dimensions: `1774 × 887` (`2:1`, RGB PNG).
 - Bytes: `2,602,967`.
 - SHA-256:
   `201acc425b3efa8c9d7448b20faa59ae6e8120d23ebe5cf982bf33e61814dc37`.
 - First committed in `337caf6`.
-- Exact original prompt, model version, generation identifier, and licence
-  record are not present in the repository.
 
-The control is immediately recognizable as the Boston Tea Party, but it fails
-material content gates: the dominant vessel reads as an oversized armed ship,
-people are shown in the water, and intact chests become theatrical projectiles.
-Its Moon is not part of the rejection decision.
+The original control was recognizable but failed material gates: the dominant
+vessel read as an oversized armed ship, people were shown in the water, and
+intact chests became theatrical projectiles. It was replaced on July 31, 2026.
 
 ### Composition candidate v1
 
@@ -137,19 +152,25 @@ the material forbidden details. The candidate remains eligible for future
 spherical finishing if that work is separately prioritized after the hackathon.
 This is a composition review, not historical certification by a specialist.
 
-## Spherical and delivery review
+## Runtime v2 review
 
-- exact `2:1` dimensions: pass;
-- true full-spherical projection: fail; the flat candidate does not establish a
-  complete 360° projection;
-- horizontal wrap continuity: fail; no seamless edge join is established;
-- zenith, nadir, and pole behaviour: fail / unresolved;
-- `8192 × 4096` immutable delivery master: not produced;
-- runtime derivative and viewer replacement: not approved.
+| Gate | Result | Evidence |
+| --- | --- | --- |
+| Event recognition | pass | people visibly open chests and empty loose tea into the harbor |
+| Merchant-ship context | pass | timber cargo vessel, ordinary rigging, no gunports or cannon rows |
+| People kept out of water | pass | every participant remains on ship or wharf |
+| Period clothing and waterfront | pass | restrained 1770s clothing and low Georgian waterfront |
+| Harmful stereotype | pass | no caricatured Indigenous costume |
+| Exact `2:1` RGB PNG | pass | `1774 × 887`, no alpha |
+| Horizontal wrap | pass | flat edge delta plus full production-viewer sweep |
+| Zenith and nadir | pass | simple sky and coherent timber/water geometry without a hole or blurred ring |
+| Desktop opening view | pass | accepted at `1280 × 720` |
+| Mobile opening view | pass | accepted at `390 × 844` |
+| Runtime integration | pass | one viewer canvas, no fallback alert or console error |
 
-Historical composition approval and spherical delivery approval are separate.
-The missing 8K delivery master is not a hackathon blocker; any runtime
-replacement still needs a short in-viewer seam and projection check.
+The final opening camera is yaw `56°`, pitch `0°`, zoom `71`, centering the
+tea-destruction action while keeping the scene usable under both the desktop and
+mobile HUD.
 
 ## Sources
 

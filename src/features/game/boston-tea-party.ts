@@ -5,7 +5,7 @@ export const bostonTeaPartyScene: Scene = {
   panorama: {
     url: "/images/boston-tea-party-panorama.png",
     initialView: {
-      yawDegrees: 0,
+      yawDegrees: 56,
       pitchDegrees: 0,
       zoomLevel: 71,
     },

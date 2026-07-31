@@ -17,8 +17,9 @@ The order is locked:
 Agents must not mix these stages. Complete and validate the current stage before
 starting the next one.
 
-Active stage: **Phase C roster revision is complete. Phase D is not yet
-authorized**.
+Active stage: **Phase D release QA and the submission content gate are complete.
+Commit, push, production deployment, and Devpost publication were explicitly
+authorized and are in progress**.
 
 ## Starting state
 
@@ -545,6 +546,69 @@ Only after the ten-round gate:
 - audit secrets and publish scope;
 - update README, screenshots, and submission material;
 - commit or push only with explicit user authorization.
+
+## Phase D functional QA record — July 31, 2026
+
+The final source passed direct ESLint, all 34 unit tests, TypeScript,
+the production Webpack build, and `git diff --check`. The `pnpm lint` wrapper
+was blocked before project execution by the known non-TTY dependency-purge
+guard; no dependency was installed or changed.
+
+The production browser completed the chronological 10-round session at
+`1280 × 720` and again at `390 × 844`. Both runs reached `Session complete`;
+the final build restarted to clean Constantinople, rendered one panorama canvas
+per round, showed no application alert, and left the clean-run console without
+warnings or errors. A `1536 × 1024` smoke check also passed.
+
+Phase D found and fixed one keyboard interaction defect. Photo Sphere Viewer's
+global `keyboard: "always"` listener could consume arrow and page keys outside
+the panorama. Keyboard control is now enabled only while the focusable
+panorama owns focus, preserving panorama keyboard navigation without coupling
+it to the event field, year ruler, map, or scrollable result. The lunar
+selected-state hint also stops naming Tranquility Base before submission.
+
+A temporary diagnostic build verified the existing panorama and map failure
+messages with known-missing local URLs. Those substitutions were reverted
+before the final build.
+
+The targeted production-viewer review then completed full horizontal rotations,
+explicit seam crossings, and zenith/nadir checks for Constantinople,
+Declaration, Bastille, Titanic, and Everest. That review found a radial star
+vortex at Titanic's exact zenith. A targeted generated upper-sky repair removed
+it while preserving the accepted lower scene; the maximum-pitch recheck then
+passed with no vortex, ring, or hole. Exact maximum-pitch checks for
+Constantinople, Bastille, and Everest also passed. No submission-blocking wrap
+jump, projection hole, remaining pole ring, or broken geometry remains.
+
+The rejected Boston control was replaced at the existing runtime path with a
+new `1774 × 887` RGB panorama generated through the Codex built-in OpenAI image
+interface. It shows people on a modest merchant vessel and wharf opening tea
+chests and emptying loose tea into the harbor, with low Georgian waterfront
+architecture. It contains none of the old hard blockers: no person is in the
+water, no intact chest is thrown as a projectile, and no warship dominates the
+scene. The replacement passed material, edge, full-rotation, seam, pole,
+desktop, and mobile review. Its final camera is yaw `56°`, pitch `0°`, zoom
+`71`; exact generation and QA evidence is in
+`docs/scenes/boston-tea-party-runtime-v2-prompt.md`.
+
+The Titanic repair prompts, deterministic composite boundary, final checksum,
+and acceptance evidence are recorded in
+`docs/scenes/titanic-zenith-repair.md`.
+
+A full browser run after the replacement again completed all ten rounds,
+reached `Session complete`, preserved the Apollo Moon result, and restarted to
+clean Constantinople. The Phase D functional and submission content gates are
+closed. Wright's documented aircraft-anatomy review remains a non-blocking
+historical-certification note.
+
+The publish-scope audit found no tracked environment file or runtime
+environment reference. `.env.local` remains ignored, and the documented CARTO
+tiles are the only gameplay network dependency.
+
+The user explicitly authorized committing and pushing all scoped PastPoint
+changes, deploying the resulting revision to Vercel production, and completing
+the open Devpost submission. Publication work follows the final static gate and
+secret audit.
 
 ## Explicitly deferred until after submission
 

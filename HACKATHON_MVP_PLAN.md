@@ -35,12 +35,13 @@ The application now has:
 - responsive desktop layout and a passing `390 × 844` smoke result;
 - unit tests and a previously completed manual browser regression.
 
-The Boston and Wright runtime panoramas remain prototypes. Bastille, Titanic,
-and Everest are retained generated candidates from the first roster. Five new
-replacement panoramas cover Constantinople, the Declaration of Independence,
-Pearl Harbor, Vostok 1, and the Apollo 11 Moon landing. Their flat material
-review and wrapped opening-view smoke are recorded separately rather than
-inherited from the superseded roster.
+Boston now uses an accepted replacement panorama; its rejected prototype remains
+only in Git history. Wright remains a prototype with a documented non-blocking
+aircraft-anatomy review. Bastille, Titanic, and Everest are retained generated
+candidates from the first roster. Five other replacement panoramas cover
+Constantinople, the Declaration of Independence, Pearl Harbor, Vostok 1, and
+the Apollo 11 Moon landing. All ten runtime scenes pass opening-view smoke, and
+the higher-risk scenes completed targeted production-viewer wrap and pole QA.
 
 ## Definition of the MVP
 
@@ -101,14 +102,14 @@ chance of producing a readable panorama quickly.
 
 | Round | Event | Asset | Metadata | Registered | Smoke test | Status |
 | ---: | --- | --- | --- | --- | --- | --- |
-| 1 | [Fall of Constantinople](./docs/scenes/fall-of-constantinople.md) | replacement candidate | ready | yes | passed | integrated opening round |
-| 2 | [Boston Tea Party](./docs/scenes/boston-tea-party.md) | prototype | ready | yes | passed previously | needs submission asset decision |
-| 3 | [Adoption of the Declaration of Independence](./docs/scenes/declaration-of-independence.md) | replacement candidate | ready | yes | passed | July 4 adoption, not later signing |
-| 4 | [Storming of the Bastille](./docs/scenes/storming-of-the-bastille.md) | retained candidate | ready | yes | passed previously | integrated |
+| 1 | [Fall of Constantinople](./docs/scenes/fall-of-constantinople.md) | replacement candidate | ready | yes | passed Phase D | integrated opening round |
+| 2 | [Boston Tea Party](./docs/scenes/boston-tea-party.md) | accepted replacement | ready | yes | passed Phase D | material, wrap, pole, desktop, and mobile gates passed |
+| 3 | [Adoption of the Declaration of Independence](./docs/scenes/declaration-of-independence.md) | replacement candidate | ready | yes | passed Phase D | July 4 adoption, not later signing |
+| 4 | [Storming of the Bastille](./docs/scenes/storming-of-the-bastille.md) | retained candidate | ready | yes | passed Phase D | integrated |
 | 5 | [Wright brothers' first flight](./docs/scenes/wright-brothers-first-flight.md) | prototype | ready | yes | passed previously | needs quick content review |
-| 6 | [Sinking of RMS Titanic](./docs/scenes/titanic-sinking.md) | retained corrected candidate | ready | yes | passed previously | integrated |
+| 6 | [Sinking of RMS Titanic](./docs/scenes/titanic-sinking.md) | retained corrected candidate | ready | yes | passed Phase D | integrated |
 | 7 | [Attack on Pearl Harbor](./docs/scenes/pearl-harbor-attack.md) | corrected replacement | ready | yes | passed | one focused aircraft correction accepted |
-| 8 | [First ascent of Mount Everest](./docs/scenes/first-ascent-of-mount-everest.md) | retained candidate | ready | yes | passed previously | calibrated and integrated |
+| 8 | [First ascent of Mount Everest](./docs/scenes/first-ascent-of-mount-everest.md) | retained candidate | ready | yes | passed Phase D | calibrated and integrated |
 | 9 | [Vostok 1 first human spaceflight](./docs/scenes/vostok-1-first-human-spaceflight.md) | replacement candidate | ready | yes | passed | launch at Baikonur Site No. 1 |
 | 10 | [Apollo 11 Moon landing](./docs/scenes/apollo-11-moon-landing.md) | replacement candidate | ready | yes | passed | explicit off-world input and result passed |
 

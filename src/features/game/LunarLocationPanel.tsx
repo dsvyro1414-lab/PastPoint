@@ -77,7 +77,7 @@ export function LunarLocationPanel({
           <strong>{selected ? "Location selected" : "Identify the world"}</strong>
           <small>
             {selected
-              ? "Tranquility Base will be revealed after submission"
+              ? "The exact site will be revealed after submission"
               : "This round happened beyond the Earth map"}
           </small>
         </span>

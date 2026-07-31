@@ -91,12 +91,15 @@ assets and scene configuration, without rewriting the HUD.
 
 ## Panorama status
 
-The Boston and Wright `1774 × 887` panoramas remain interaction prototypes.
-The eight added panoramas are generated hackathon candidates. The retained
-Bastille, Titanic, and Everest candidates previously passed static material
-review and desktop opening-view smoke; the five replacement candidates now pass
-the same runtime opening-view smoke, including the Moon-specific input and
-result path. Native 4K or 8K output is not a submission requirement.
+Boston now uses an accepted replacement `1774 × 887` panorama; its original
+interaction prototype remains only in Git history. Wright remains an
+interaction prototype with a documented non-blocking aircraft-anatomy review.
+The other eight panoramas are generated hackathon candidates. All ten runtime
+assets pass opening-view smoke, and the higher-risk Constantinople, Boston,
+Declaration, Bastille, Titanic, and Everest scenes also passed targeted
+production-viewer wrap and pole review. The Apollo scene passes its distinct
+Moon-specific input and result path. Native 4K or 8K output is not a submission
+requirement.
 
 Scene-specific facts and review notes live in:
 
